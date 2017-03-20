@@ -1,8 +1,66 @@
 # Anforderungen / User Stories 
 
+
+## MVP
+
+Funktional:
+  
+  * Ich als Benutzer möchte Nachrichten versenden können, um kommunizieren zu können.
+  * Ich als User möchte mein Profil erstellen können, damit man mich identifizieren kann. (Name etc.)
+  * Ich als Benutzer möchte eine Suchfunktion integriert haben, um andere Benutzer finden zu können.
+  * Ich als Benutzer möchte meinen Account löschen können, falls ich das Programm nicht mehr benutzen will.
+  * Ich als Benutzer möchte ein Einstellungsmenu haben, um Einstellungen anpassen zu können.
+ 
+
+
+Nicht Funktional:
+
+  * Ich als sicherheitsbewußter Mensch möchte Verschlüsselungen haben, um Schutz vor Fremden Eingriffen zu haben.
+  * Nicht zu komplexes Design
+  
+*******************************************
+
+## Mittel
+
+Funktional:
+  
+  * Ich als Benutzer möchte Nachrichten versenden können, um kommunizieren zu können.
+  * Ich als User möchte mein Profil erstellen können, damit man mich identifizieren kann. (Name etc.)
+  * Ich als Benutzer möchte eine Suchfunktion integriert haben, um andere Benutzer finden zu können.
+  * Ich als Benutzer möchte meinen Account löschen können, falls ich das Programm nicht mehr benutzen will.
+  * Ich als Benutzer möchte ein Einstellungsmenu haben, um Einstellungen anpassen zu können.
+  * Ich als sozialer Mensch möchte an Gruppenchats teilnehmen können, um mit mehreren Menschen gleichzeitig zu kommunizieren.
+  * Ich als Benutzer möchte eine Suchfunktion integriert haben, um andere Benutzer finden zu können.
+  
+ 
+
+
+Nicht Funktional:
+
+  * Ich als sicherheitsbewußter Mensch möchte Verschlüsselungen haben, um Schutz vor Fremden Eingriffen zu haben.
+  * Nicht zu komplexes Design
+  
+*******************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## MUSS: 
 
 ************************************************
+ 
   Ich als Benutzer möchte Nachrichten versenden können, um kommunizieren zu können.
 
   Ich als sicherheitsbewußter Mensch möchte Verschlüsselungen haben, um Schutz vor Fremden Eingriffen zu haben.
@@ -58,6 +116,7 @@
       Anfragen von Unnbekannten
       Notifications
       Notifications (gelesen oder nicht gelesen)
+      Durchsuchbaren-Chat
       
       guten Server (wartbar machen)
       Sachen aus Entwickler-Sicht...
@@ -65,12 +124,18 @@
       Messenger erweitertbar
       
       geringst-mögliche Verzögerungen (lags)
+    
       
       Portabilität
       
       Profil importieren/exportieren
       
       Umfragen-Funktion
+      
+      
+      
+      
+     *******************************************************************************************************
       
       
       
