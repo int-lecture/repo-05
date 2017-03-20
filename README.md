@@ -1,7 +1,7 @@
-#Beschreibung des Projekts:
+# Beschreibung des Projekts:
 ***********************************************************************
 
-  ##Chat-Box
+  ## Chat-Box
   
   In diesem Projekt wird ein Chat-Messenger erstellt, der hauptsächlich auf einem PC mittels 
   verteilte Architekturen verwendet wird und der von mehreren Benutzern 
