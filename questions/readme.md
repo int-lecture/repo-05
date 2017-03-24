@@ -8,4 +8,7 @@
 * Werden alle Daten verschlüsselt?
 * Welche Daten werden verschlüsselt?
 * Welche Daten verteilt der Load-Balancer?
-* Ist ein Load-Balancer für unser Projekt nötig, oder werden Load-Balancer nur für große Computernetzwerke verwendet?
+* Ist ein Load-Balancer für unser Projekt nötig oder werden Load-Balancer nur für große Computernetzwerke(mehrere Server) verwendet?
+* Wie funktioniert ein Nachrichtenverteiler?
+* Funktionsprinzip des Accountmanagers?
+*
