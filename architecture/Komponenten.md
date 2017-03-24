@@ -22,6 +22,10 @@
   
   * Authentifizierung:
   Wird benutzt um sicherzustellen, dass bestimmte Daten nur für die dazugehörigen Nutzer sichtbar sind. Erfolgt meistens über Abfrage von Name und Passwort.
+  
+  # Komponenten die man mehrmals verwenden kann
+  
+  * Zuviele Nutzeranfragen können zu Performanceverlust führen.Dies könnte man durch mehrere Webserver verhindern.
  
  
 
