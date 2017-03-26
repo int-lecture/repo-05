@@ -11,4 +11,4 @@
 * Ist ein Load-Balancer für unser Projekt nötig oder werden Load-Balancer nur für große Computernetzwerke(mehrere Server) verwendet?
 * Wie funktioniert ein Nachrichtenverteiler?
 * Funktionsprinzip des Accountmanagers?
-*
+* (Duplex/Halbduplex für das Projekt?)
