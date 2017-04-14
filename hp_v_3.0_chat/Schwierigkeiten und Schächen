@@ -1,5 +1,4 @@
 # Schwierigkeiten und Schwächen 
-Gruppe05
                    
 PHP Undefined Fehler treten auf->Notlösung : error_reporting(0); (unschön).
 
