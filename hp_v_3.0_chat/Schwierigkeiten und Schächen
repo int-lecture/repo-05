@@ -5,7 +5,8 @@ PHP Undefined Fehler treten auf->Notlösung : error_reporting(0); (unschön).
 
 Man muss bei erneutem Besuch der Seite den Namen eingeben um die Kontaktliste zu sehen.(Cookies?).
 
-Es wird noch zwischen Groß-und Kleinschreibung unterschieden was dazu führt , dass die Kontaktliste nicht angezeigt wird wenn man statt z.B.
+Es wird noch zwischen Groß-und Kleinschreibung unterschieden was dazu führt, 
+dass die Kontaktliste nicht angezeigt wird wenn man statt z.B.
 "John", "john" eingibt.Es wird also eine neue Textdatei angelegt.
 
 Beim Refreshen der Seite muss man runter scrollen um die aktuellen Nachrichten zu sehen.
@@ -14,7 +15,8 @@ Wir haben den Clear button der zum Löschen des Chatverlaufs diente, entfernt, d
 
 Wenn man beim Login nur seinen Namen eingibt, wird die Kontaktliste nicht mehr angezeigt.
 
-Wir hatten Probleme mit den Zugriffsrechten des Ordners "Chatverlauf" die sich ständig änderten, dadurch konnte nicht mehr auf die Textdateien zugegriffen werden.
+Wir hatten Probleme mit den Zugriffsrechten des Ordners "Chatverlauf" die sich ständig änderten, 
+dadurch konnte nicht mehr auf die Textdateien zugegriffen werden.
 ->Durch 0767 gelöst.chmod(&pfad,0767) statt chmod(&datei,0767) Ausführen[x] hat gefehlt.
 
 Gibt man einen neuen Chatpartner ein wird dieser erst zu den Kontakten hinzugefügt wenn die Textdatei erstellt wurde.
@@ -34,4 +36,5 @@ Manchmal funktioniert alles super und dann dauert es mehrere Sekunden bis eine e
 Kann es sein das der Server für eine bestimmte zeit nicht mehr aktualisiert? 
 
 Eines der Schwierigkeiten war unteranderem eine "richtige" Vorgehensweise, oder die "beste" Art und Weise
-zu finden eine funktionierende Kontaktliste einzubinden bzw.zu implementieren. Und auch zu verstehen wie die Kontaktliste (also im Falle unseres Chats) funktionieren soll und wie sie erstellt werden sollte.
+zu finden eine funktionierende Kontaktliste einzubinden bzw.zu implementieren. Und auch zu verstehen wie die Kontaktliste 
+(also im Falle unseres Chats) funktionieren soll und wie sie erstellt werden sollte.
