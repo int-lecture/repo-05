@@ -31,7 +31,6 @@
 		fwrite($d,"(".$date.") :".$user."_".$text."\n");
 	}
 	
-	//CSS Id's funktionieren nicht wenn iframe mit echo ausgegeben wird?
 	echo "<h1>Chi-Chat</h1>";
 	echo "<h3>Du chattest jetzt mit ".$chatpartner."</h3>";
 	
@@ -41,8 +40,7 @@
 	if($user!="" and $chatpartner!=""){
 		echo "<h2>Kontakte</h2>";
 		foreach($arrayDateien as $value){
-			$arrayNamen=explode("-",$value);
-				
+			$arrayNamen=explode("-",$value);	
 			if($arrayNamen[0]==$user){
 				echo" <h2><a href=Chi-Chat.php?user=".$user."&chatpartner=".$arrayNamen[1].">".$arrayNamen[1]."</a></h2>";	
 			}elseif($arrayNamen[1]==$user){
@@ -51,6 +49,7 @@
 				
 		}
 	}
+	//CSS Id's funktionieren nicht wenn iframe mit echo ausgegeben wird?
 	//$datei führt beim iframe zu Fehler(Resource id)?
 	echo "<center><iframe src=".$pfad." width='700px' height='430px' scrolling='yes' name='Chatbox'></iframe></center>";
 	fclose($d);	
@@ -72,7 +71,7 @@
 		<a href="Produkt.html" 		id="Produkt">Produkt</a>
 		<a href="Impressum.html"	id="Impressum">Impressum</a>
 		<a href="Newsletter.html"	id="Newsletter">Newsletter</a>
-		<a href="login.php"			id="login">Chat</a>
+		<a href="login.php"		id="login">Chat</a>
 		</div>
 	</body> 
 </html>
