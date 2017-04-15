@@ -37,3 +37,5 @@
 * Eines der Schwierigkeiten war unteranderem eine "richtige" Vorgehensweise, oder die "beste" Art und Weise
   zu finden eine funktionierende Kontaktliste einzubinden bzw.zu implementieren. Und auch zu verstehen wie die Kontaktliste 
   (also im Falle unseres Chats) funktionieren soll und wie sie erstellt werden sollte.
+
+* Mehrere Nutzer können in einem Account eingeloggt sein
