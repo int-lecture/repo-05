@@ -11,15 +11,16 @@
   <?php
 		//http://stackoverflow.com/questions/1053424/how-do-i-get-php-errors-to-display
 		//Error Reporting komplett abschalten
-		//error_reporting(0);
+		error_reporting(0);
+	  	//define('DEBUG', true);
 	  
 	  	//stackoverflow.com/questions/15949304/turn-off-display-error-php-ini
-	 	if(DEBUG == true){
+	 	/*if(DEBUG == true){
 			 //Alle Fehler anzeigen
   			 display_errors(true);
 		}else{
   			 display_errors(false); 
-		}
+		}*/
 		
       		$chatpartner = $_GET["chatpartner"];
 		$username = $_GET["user"];
