@@ -7,3 +7,4 @@
  * Liste der MIME-Typen wird von der IANA verwaltet
  * E-Tags
  * Folie 284
+ * synchrone - asysnchrone Kommunikation
