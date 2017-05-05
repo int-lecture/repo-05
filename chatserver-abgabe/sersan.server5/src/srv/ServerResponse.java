@@ -70,19 +70,12 @@ public class ServerResponse {
 	@Path("/send")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response putMessage(String jsonFormat){
-
+	public Response putMessage(String jsonFormat) throws JSONException, ParseException {
+		
 		if (Message.isJSONValid(jsonFormat)) {
 
 			JSONObject j = null;
-			try {
 				j = new JSONObject(jsonFormat);
-			} catch (JSONException e) {
-				
-				e.printStackTrace();
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			}
-
 			// Wenn der Benutzer nicht vorhanden ist wird dieser neu angelegt
 			if (!map.containsKey(j.optString("to"))) {
 				map.put(j.optString("to"), new Benutzer(j.optString("to")));
@@ -91,29 +84,14 @@ public class ServerResponse {
 			String dateStr = (String) j.opt("date");
 			SimpleDateFormat sdf = new SimpleDateFormat(ServerResponse.ISO8601);
 			Date date = null;
-			try {
-				date = sdf.parse(dateStr);
-			} catch (ParseException e) {
-				
-				e.printStackTrace();
-
-			}
-
+			date = sdf.parse(dateStr);
+			
 			Benutzer benutzer = map.get(j.optString("to"));
 			int seq = benutzer.sequence += 1;
 
 			Message msg = new Message(j.optString("from"), j.optString("to"), date, j.optString("text"), seq);
-
 			benutzer.msgliste.offer(msg);
-
-			try {
-				return Response.status(Status.CREATED).entity(msg.datenKorrekt().toString()).build();
-			} catch (JSONException e) {
-				
-				e.printStackTrace();
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-
-			}
+			return Response.status(Status.CREATED).entity(msg.datenKorrekt().toString()).build();
 		} else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
@@ -134,33 +112,21 @@ public class ServerResponse {
 	@GET
 	@Path("/messages/{user_id}/{sequence_number}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence) {
-
+	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence) throws JSONException  {
+		
 		if (map.containsKey(user_id)) {
 
 			if (!map.get(user_id).msgliste.isEmpty()) {
 
 				Benutzer benutzer = map.get(user_id);
 				JSONArray jArray;
-				try {
-					jArray = benutzer.getMessageAsJson(sequence);
-				} catch (JSONException e) {
-					
-					e.printStackTrace();
-					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-				}
+				jArray = benutzer.getMessageAsJson(sequence);
 				benutzer.deleteMsg(sequence);
 				if (jArray.length() == 0) {
 					return Response.status(Status.NO_CONTENT).build();
 				}
 
-				try {
-					return Response.status(Status.OK).entity(jArray.toString(3)).type(MediaType.APPLICATION_JSON).build();
-				} catch (JSONException e) {
-					
-					e.printStackTrace();
-					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-				}
+				return Response.status(Status.OK).entity(jArray.toString(3)).type(MediaType.APPLICATION_JSON).build();
 			} else {
 				return Response.status(Status.NO_CONTENT).build();
 			}
