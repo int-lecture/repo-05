@@ -21,7 +21,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
- * Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
+ * Dienste des Servers. Hier wird das Protokoll fÃ¼r den Nachrichten-Transfer
  * implementiert.
  *
  * @author Santino Nobile, Sergej Kryvoruchko
@@ -54,8 +54,8 @@ public class ServerResponse {
 	}
 
 	/**
-	 * Abfangen einer Message des Benutzers. Wenn das Format zulässig ist sendet
-	 * der Server 201.Wenn das Format nicht zulässig ist sendet der Server 400.
+	 * Abfangen einer Message des Benutzers. Wenn das Format zulÃ¤ssig ist sendet
+	 * der Server 201.Wenn das Format nicht zulÃ¤ssig ist sendet der Server 400.
 	 *
 	 * @param jsonFormat
 	 *            - Nachricht des Benutzers.
@@ -78,7 +78,7 @@ public class ServerResponse {
 			try {
 				j = new JSONObject(jsonFormat);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 			}
@@ -94,7 +94,7 @@ public class ServerResponse {
 			try {
 				date = sdf.parse(dateStr);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 
 			}
@@ -109,7 +109,7 @@ public class ServerResponse {
 			try {
 				return Response.status(Status.CREATED).entity(msg.datenKorrekt().toString()).build();
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 
@@ -121,7 +121,7 @@ public class ServerResponse {
 	}
 
 	/**
-	 * Der Client holt die Nachrichten vom Server mit GET über --> @Path.
+	 * Der Client holt die Nachrichten vom Server mit GET Ã¼ber --> @Path.
 	 *
 	 * @param user_id
 	 *            - Der Name des Benutzers
@@ -145,7 +145,7 @@ public class ServerResponse {
 				try {
 					jArray = benutzer.getMessageAsJson(sequence);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 				}
@@ -157,7 +157,7 @@ public class ServerResponse {
 				try {
 					return Response.status(Status.OK).entity(jArray.toString(3)).type(MediaType.APPLICATION_JSON).build();
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 					return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 				}
