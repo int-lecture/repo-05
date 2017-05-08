@@ -14,7 +14,7 @@ import org.codehaus.jettison.json.JSONException;
  * Ein einfacher Chat-Benutzer, der einen Namen als Attribut hat. In dieser
  * Klasse werden auch die Sequenznummern und Nachrichtenliste verwaltet.
  *
- * @author Santino Nobile, Sergej Kryvoruchko
+ * @author Gruppe5
  *
  **/
 public class Benutzer {
