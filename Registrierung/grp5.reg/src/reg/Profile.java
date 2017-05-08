@@ -39,7 +39,6 @@ public class Profile {
 	}
 	public JSONObject profileToJson() throws JSONException{
 		JSONObject j = new JSONObject();
-		String[] string = new String[contact.size()];
 		j.put("name", this.pseudonym);
 		j.put("email", this.userEmail);
 		j.put("contact", Arrays.toString(contact.toArray(new String[contact.size()])));
