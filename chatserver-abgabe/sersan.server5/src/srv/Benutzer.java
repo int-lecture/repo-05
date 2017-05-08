@@ -1,3 +1,4 @@
+
 package srv;
 
 import java.util.ArrayDeque;
@@ -55,7 +56,7 @@ public class Benutzer {
 	 * diesen Objekten ausgibt.
 	 *
 	 * @param sequence
-	 *            - Sequenznummer die übergeben wird.
+	 *            - Sequenznummer die Ã¼bergeben wird.
 	 * @return jArray - Ein Array aus Json Objekten der Nachrichten
 	 * @throws JSONException
 	 *             - Wird geworfen, falls es Probleme mit der Umwandlung gibt
@@ -70,12 +71,11 @@ public class Benutzer {
 			}
 			return jArray;
 			/*
-			 * die Nachricht wird sonst ständig ausgegeben
+			 * die Nachricht wird sonst stÃ¤ndig ausgegeben
 			 */
 		} else if (sequence < this.sequence) {
-			for (int i = 1, n = this.sequence; n > sequence; n--) {
+			for (int i=0; i<msgArray.length;i++) {
 				msgArray[msgArray.length - i] = copy.pollLast();
-				i++;
 			}
 			for (Message msg: msgArray) {
 				jArray.put(msg.toJson());
@@ -86,25 +86,25 @@ public class Benutzer {
 	}
 
 	/**
-	 * Löscht die Nachrichten deren Sequenznummer kleiner oder gleich der
-	 * übergebenen Sequenznummer sind.
+	 * LÃ¶scht die Nachrichten deren Sequenznummer kleiner oder gleich der
+	 * Ã¼bergebenen Sequenznummer sind.
 	 *
 	 * @param sequence
-	 *            - übergebene Sequenznummer.
+	 *            - Ã¼bergebene Sequenznummer.
 	 */
 	public void deleteMsg(int sequence) {
 		/*
 		 * Die erste Nachricht hat bei uns die SeqNr 1. 1 ist nicht
-		 * kleinergleich 0 -> die erste Nachricht wird sonst nicht gelöscht wenn
-		 * die SeqNr 0 übergeben wird.
+		 * kleinergleich 0 -> die erste Nachricht wird sonst nicht gelÃ¶scht wenn
+		 * die SeqNr 0 Ã¼bergeben wird.
 		 */
 		if (sequence == 0 && !msgliste.isEmpty()) {
 			msgliste.poll();
 		} else {
 			/*
 			 * "Nachdem der Server die Liste der Nachrichten gesendet hat,
-			 * löscht er alle Nachrichten des Nutzers, deren Sequenznummer <=
-			 * der übergebenen Zahl ist. Dieses Feature sollte allerdings für
+			 * lÃ¶scht er alle Nachrichten des Nutzers, deren Sequenznummer <=
+			 * der Ã¼bergebenen Zahl ist. Dieses Feature sollte allerdings fÃ¼r
 			 * Testzwecke ein- und ausschaltbar sein."
 			 */
 			for (Message msg: msgliste) {
