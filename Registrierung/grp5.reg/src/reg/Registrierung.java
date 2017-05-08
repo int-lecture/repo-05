@@ -56,6 +56,7 @@ public class Registrierung {
 					//Pseudonym gibt es nicht
 
 					Profile profil = new Profile(j.optString("pseudonym"),j.optString("passwort"),j.optString("user"));
+					profile.add(profil);
 					JSONObject ok = new JSONObject();
 					ok.put("success", true);
 					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
@@ -63,6 +64,7 @@ public class Registrierung {
 				//Wenn Liste leer
 				}else{
 					Profile profil = new Profile(j.optString("pseudonym"),j.optString("passwort"),j.optString("user"));
+					profile.add(profil);
 					JSONObject ok = new JSONObject();
 					ok.put("success", true);
 					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
