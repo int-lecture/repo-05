@@ -24,7 +24,7 @@ import org.codehaus.jettison.json.JSONObject;
  * Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
  * implementiert.
  *
- * @author Santino Nobile, Sergej Kryvoruchko
+ * @author Gruppe5
  */
 
 /*
@@ -34,8 +34,7 @@ import org.codehaus.jettison.json.JSONObject;
 @Path("")
 public class ServerResponse {
 
-	/** String der das Datum in ISO 8601 Format umwandelt. */
-	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
+
 
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
@@ -49,9 +48,9 @@ public class ServerResponse {
 	// public String sayHello() {
 	// return "Hello World!\n";
 	// }
-	public ServerResponse(){
-
-	}
+	//	public ServerResponse(){
+	//
+	//	}
 
 	/**
 	 * Abfangen einer Message des Benutzers. Wenn das Format zulässig ist sendet
@@ -71,7 +70,7 @@ public class ServerResponse {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response putMessage(String jsonFormat) throws JSONException, ParseException {
-		
+
 		if (Message.isJSONValid(jsonFormat)) {
 
 			JSONObject j = null;
@@ -81,15 +80,11 @@ public class ServerResponse {
 				map.put(j.optString("to"), new Benutzer(j.optString("to")));
 			}
 
-			String dateStr = (String) j.opt("date");
-			SimpleDateFormat sdf = new SimpleDateFormat(ServerResponse.ISO8601);
-			Date date = null;
-			date = sdf.parse(dateStr);
-			
-			Benutzer benutzer = map.get(j.optString("to"));
-			int seq = benutzer.sequence += 1;
+			Date date = Message.stringToDate(j.optString("date"));
 
-			Message msg = new Message(j.optString("from"), j.optString("to"), date, j.optString("text"), seq);
+			Benutzer benutzer = map.get(j.optString("to"));
+
+			Message msg = new Message(j.optString("from"), j.optString("to"), date, j.optString("text"), benutzer.sequence += 1);
 			benutzer.msgliste.offer(msg);
 			return Response.status(Status.CREATED).entity(msg.datenKorrekt().toString()).build();
 		} else {
@@ -113,7 +108,7 @@ public class ServerResponse {
 	@Path("/messages/{user_id}/{sequence_number}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence) throws JSONException  {
-		
+
 		if (map.containsKey(user_id)) {
 
 			if (!map.get(user_id).msgliste.isEmpty()) {
