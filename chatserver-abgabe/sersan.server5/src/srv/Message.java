@@ -1,5 +1,7 @@
+
 package srv;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,6 +11,10 @@ import org.codehaus.jettison.json.JSONObject;
 
 
 public class Message {
+
+	/** String der das Datum in ISO 8601 Format umwandelt. */
+	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
+
 	  /** From. */
     String from;
 
@@ -59,7 +65,7 @@ public class Message {
      */
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat(ServerResponse.ISO8601);
+        SimpleDateFormat sdf = new SimpleDateFormat(ISO8601);
 
         return String.format("{ 'from': '%s', 'to': '%s', 'date': '%s', 'text': '%s'}".replace('\'',  '"'),
                 from, to, sdf.format(new Date()), text);
@@ -68,10 +74,10 @@ public class Message {
 
 
     /**
-     * Prüft ob der übergebene String in ein JSONObjekt
+     * PrÃ¼ft ob der Ã¼bergebene String in ein JSONObjekt
      * abgespeichert werden kann.
      *
-     * @param test - Der String der geprüft wird.
+     * @param test - Der String der geprÃ¼ft wird.
      * @return boolean - wahr oder falsch.
      */
     public static boolean isJSONValid(String test) {
@@ -87,6 +93,24 @@ public class Message {
         return true;
     }
     /**
+     * Wandelt ein Date Objekt in ein String um.
+     * @param date
+     * @return Date Zeichenkette in ISO8601 format
+     */
+    public static String dateToString(Date date){
+    	return new SimpleDateFormat(ISO8601).format(date);
+    }
+
+    /**
+     * Wandelt einen Datestring in ein Date Objekt um.
+     * @param date
+     * @return Date Objekt
+     * @throws ParseException
+     */
+    public static Date stringToDate(String date) throws ParseException{
+    	return new SimpleDateFormat().parse(date);
+    }
+    /**
      * Bei korrekter Formattierung der gesendeter Nachricht
      * wird dieses Objekt als Antwort-Json an den Client gesendet.
      *
@@ -98,7 +122,7 @@ public class Message {
     public JSONObject datenKorrekt() throws JSONException{
 
     	JSONObject obj = new JSONObject();
-    	SimpleDateFormat sdf = new SimpleDateFormat(ServerResponse.ISO8601);
+    	SimpleDateFormat sdf = new SimpleDateFormat(ISO8601);
     	obj.put("date",sdf.format(date));
     	obj.put("sequence",this.sequence);
     	return obj;
@@ -113,11 +137,10 @@ public class Message {
      */
     public JSONObject toJson() throws JSONException{
     	JSONObject obj = new JSONObject();
-    	SimpleDateFormat sdf = new SimpleDateFormat(ServerResponse.ISO8601);
 
     	obj.put("from", from);
     	obj.put("to", to);
-    	obj.put("date",sdf.format(date));
+    	obj.put("date",dateToString(this.date));
     	obj.put("text",text);
     	obj.put("sequence", sequence);
     	return obj;
