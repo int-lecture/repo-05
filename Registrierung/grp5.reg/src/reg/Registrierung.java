@@ -98,7 +98,37 @@ public class Registrierung {
         }
         return true;
     }
+	
+    //TODO Profilanfragen (eigener Server für Profile?)
+    @Path("/profile")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getProfile(String jsonFormat) throws JSONException{
+    	if(isJSONValid(jsonFormat)){
+    		JSONObject j = new JSONObject(jsonFormat);
+    		if(j.optString("token")!=null && j.optString("getownprofile")!=null ){
 
-	//TODO Profilanfragen (eigener Server für Profile?)
+    			Profile nutzer=null;
+    			for(Profile profil:profile){
+					if(j.optString("pseudonym")==profil.getPseudonym()){
+						nutzer=profil;
+					}
+				}
+    			if(nutzer==null){
+    				return Response.status(Status.BAD_REQUEST).entity("Unknown").build();
+    			}
+    			if(nutzer.getToken()==j.optString("token")){
+    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
+    			}
+    		}
+    		return Response.status(Status.BAD_REQUEST).entity("Bad token lol").build();
+    	}else{
+    		return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
+    	}
+
+    }
+
+}
 
 }
