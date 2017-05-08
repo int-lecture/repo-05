@@ -43,7 +43,7 @@ public class Registrierung {
 
 		if(isJSONValid(jsonFormat)){
 			JSONObject j = new JSONObject(jsonFormat);
-			if(j.optString("pseudonym")!=null || j.optString("passwort")!=null ||j.optString("user")!=null){
+			if(j.optString("pseudonym")!=null && j.optString("passwort")!=null &&j.optString("user")!=null){
 				//Wenn Liste nicht leer
 				if(!profile.isEmpty()){
 					//Schauen ob es Pseudonym schon gibt
@@ -69,7 +69,7 @@ public class Registrierung {
 				}
 
 			}else{
-				return Response.status(Status.BAD_REQUEST).entity("Felder dürfen nicht leer sein!").build();
+				return Response.status(Status.BAD_REQUEST).entity("Felder dÃ¼rfen nicht leer sein!").build();
 			}
 		}else{
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
@@ -79,11 +79,11 @@ public class Registrierung {
 	}
 
 	 /**
-     * Prüft ob der übergebene String in ein JSONObjekt
+     * PrÃ¼ft ob der Ã¼bergebene String in ein JSONObjekt
      * abgespeichert werden kann.
      * Quelle:http://stackoverflow.com/questions/10174898/how-to-check-whether-a-given-string-is-valid-json-in-java
      *
-     * @param test - Der String der geprüft wird.
+     * @param test - Der String der geprÃ¼ft wird.
      * @return boolean - wahr oder falsch.
      */
     public static boolean isJSONValid(String test) {
@@ -99,6 +99,6 @@ public class Registrierung {
         return true;
     }
 
-	//TODO Profilanfragen (eigener Server für Profile?)
+	//TODO Profilanfragen (eigener Server fÃ¼r Profile?)
 
 }
