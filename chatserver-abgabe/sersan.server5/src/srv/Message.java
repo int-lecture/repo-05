@@ -108,7 +108,7 @@ public class Message {
      * @throws ParseException
      */
     public static Date stringToDate(String date) throws ParseException{
-    	return new SimpleDateFormat().parse(date);
+    	return new SimpleDateFormat(ISO8601).parse(date);
     }
     /**
      * Bei korrekter Formattierung der gesendeter Nachricht
