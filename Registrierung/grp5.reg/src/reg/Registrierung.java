@@ -48,7 +48,7 @@ public class Registrierung {
 				if(!profile.isEmpty()){
 					//Schauen ob es Pseudonym schon gibt
 					for(Profile profil:profile){
-						if(j.optString("pseudonym")==profil.getPseudonym()){
+						if(j.optString("pseudonym").equals(profil.getPseudonym())){
 							//Es gibt Pseudonym bereits
 							return Response.status(Status.BAD_REQUEST).build();
 						}
@@ -113,7 +113,7 @@ public class Registrierung {
 
     			Profile nutzer=null;
     			for(Profile profil:profile){
-					if(j.optString("pseudonym")==profil.getPseudonym()){
+					if(j.optString("pseudonym").equals(profil.getPseudonym())){
 						nutzer=profil;
 					}
 				}
