@@ -69,29 +69,65 @@ public class ServerResponse {
 	@Path("/send")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response putMessage(String jsonFormat) throws JSONException, ParseException {
-
-		if (Message.isJSONValid(jsonFormat)) {
-
-			JSONObject j = null;
-				j = new JSONObject(jsonFormat);
-			// Wenn der Benutzer nicht vorhanden ist wird dieser neu angelegt
-			if (!map.containsKey(j.optString("to"))) {
-				map.put(j.optString("to"), new Benutzer(j.optString("to")));
+	public Response putMessage(String jsonFormat)  {
+		Message test=null;
+		JSONObject j = null;
+		try {
+			j = new JSONObject(jsonFormat);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		Date date=null;
+		if(j.has("date")){
+			try {
+				date = Message.stringToDate(j.optString("date"));
+			} catch (ParseException e) {
+						e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+			}	
+		}else{
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if(j.has("from")&&j.has("to")&&j.has("text")){
+			try {
+				test = new Message(j.getString("from"),
+					   j.getString("to"), date,j.getString("text"),
+					   j.optInt("sequence") );
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return Response.status(Status.BAD_REQUEST).build();
 			}
 
-			Date date = Message.stringToDate(j.optString("date"));
+		}else{
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 
+		if (Message.isJSONValid(jsonFormat)&&test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null) {
+			//if(test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null){
+			
+			// Wenn der Benutzer nicht vorhanden ist wird dieser neu angelegt
+			if (!map.containsKey(j.optString("to"))) {
+				 map.put(j.optString("to"), new Benutzer(j.optString("to")));
+			}
+			//}else{
+			//	return Response.status(Status.BAD_REQUEST).build();
+			//}
 			Benutzer benutzer = map.get(j.optString("to"));
-
-			Message msg = new Message(j.optString("from"), j.optString("to"), date, j.optString("text"), benutzer.sequence += 1);
-			benutzer.msgliste.offer(msg);
-			return Response.status(Status.CREATED).entity(msg.datenKorrekt().toString()).build();
+			test = new Message(j.optString("from"), j.optString("to"), 
+					   date, j.optString("text"), benutzer.sequence += 1);
+			benutzer.msgliste.offer(test);
+			try {
+				return Response.status(Status.CREATED).entity
+		               (test.datenKorrekt().toString()).build();
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return Response.status(Status.BAD_REQUEST).build();
+			}
 		} else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
-
-	}
+}
 
 	/**
 	 * Der Client holt die Nachrichten vom Server mit GET über --> @Path.
