@@ -113,7 +113,7 @@ public class Registrierung {
 
     			Profile nutzer=null;
     			for(Profile profil:profile){
-					if(j.optString("pseudonym").equals(profil.getPseudonym())){
+					if(j.optString("getownprofile").equals(profil.getPseudonym())){
 						nutzer=profil;
 					}
 				}
