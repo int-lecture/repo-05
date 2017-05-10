@@ -124,7 +124,7 @@ public class Registrierung {
     				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
     			}
     		}
-    		return Response.status(Status.BAD_REQUEST).entity("Bad token lol").build();
+    		return Response.status(Status.BAD_REQUEST).entity("Bad token").build();
     	}else{
     		return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
     	}
