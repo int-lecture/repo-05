@@ -20,6 +20,12 @@ import org.codehaus.jettison.json.JSONException;
 public class Benutzer {
 	/** Name des Benutzers */
 	String name;
+	
+	/**Token des Benutzers */
+	String token;
+	
+	/** Auslaufdatum des Tokens*/
+	Date expDate;
 
 	/** Sequenznummer */
 	int sequence;
