@@ -8,6 +8,7 @@ import java.util.Date;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.apache.commons.codec.binary.Base64;
 
 
 public class Message {
@@ -15,6 +16,8 @@ public class Message {
 	/** String der das Datum in ISO 8601 Format umwandelt. */
 	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
 
+	/**Token des Benutzers*/
+	String token;
 	  /** From. */
     String from;
 
@@ -92,7 +95,16 @@ public class Message {
         }
         return true;
     }
-    /**
+	
+/**
+     * Prüft ob das übergebene Token gemäß Base64 formatiert ist.
+     * @param token - das übergebene Token
+     * @return wahr oder falsch - Token ist formatiert oder nicht.
+     */
+    public static boolean isTokenValid(String token){
+    	return Base64.isArrayByteBase64(token.getBytes());
+    }
+/**
      * Wandelt ein Date Objekt in ein String um.
      * @param date
      * @return Date Zeichenkette in ISO8601 format
