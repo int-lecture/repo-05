@@ -34,8 +34,6 @@ import org.codehaus.jettison.json.JSONObject;
 @Path("")
 public class ServerResponse {
 
-
-
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 
@@ -72,13 +70,14 @@ public class ServerResponse {
 	public Response putMessage(String jsonFormat)  {
 		Message test=null;
 		JSONObject j = null;
+		Date date=null;
+		Benutzer benutzer=null;
 		try {
 			j = new JSONObject(jsonFormat);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		Date date=null;
 		if(j.has("date")){
 			try {
 				date = Message.stringToDate(j.optString("date"));
@@ -89,9 +88,9 @@ public class ServerResponse {
 		}else{
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if(j.has("from")&&j.has("to")&&j.has("text")){
+		if(j.has("from")&&j.has("to")&&j.has("text")&&j.has("token")){
 			try {
-				test = new Message(j.getString("from"),
+				test = new Message(j.getString("token"), j.getString("from"),
 					   j.getString("to"), date,j.getString("text"),
 					   j.optInt("sequence") );
 			} catch (JSONException e) {
@@ -103,7 +102,9 @@ public class ServerResponse {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
-		if (Message.isJSONValid(jsonFormat)&&test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null) {
+		if (Message.isJSONValid(jsonFormat)&&Message.isTokenValid(test.token)
+				&&test.token!=null&&test.from!=null&&test.to!=null
+				&&test.date!=null&&test.text!=null ) {
 			//if(test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null){
 			
 			// Wenn der Benutzer nicht vorhanden ist wird dieser neu angelegt
@@ -113,10 +114,14 @@ public class ServerResponse {
 			//}else{
 			//	return Response.status(Status.BAD_REQUEST).build();
 			//}
-			Benutzer benutzer = map.get(j.optString("to"));
-			test = new Message(j.optString("from"), j.optString("to"), 
+			benutzer = map.get(j.optString("to"));
+			if(test.date.equals(benutzer.expDate)&&test.date.after(benutzer.expDate)){
+				return Response.status(Status.UNAUTHORIZED).build();
+				}
+			test = new Message(j.optString("token"),j.optString("from"), j.optString("to"), 
 					   date, j.optString("text"), benutzer.sequence += 1);
-			benutzer.msgliste.offer(test);
+						benutzer.msgliste.offer(test);
+
 			try {
 				return Response.status(Status.CREATED).entity
 		               (test.datenKorrekt().toString()).build();
@@ -124,7 +129,11 @@ public class ServerResponse {
 				e.printStackTrace();
 				return Response.status(Status.BAD_REQUEST).build();
 			}
-		} else {
+			
+			}else if(!Message.isTokenValid(test.token)){
+				
+				return Response.status(Status.UNAUTHORIZED).build();
+				} else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 }
