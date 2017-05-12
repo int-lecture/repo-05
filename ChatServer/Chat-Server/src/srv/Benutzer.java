@@ -44,29 +44,12 @@ public class Benutzer {
 		this.name = name;
 		this.sequence = 0;
 		try {
-			this.expDate=Message.stringToDate("2010-03-30T17:00:00Z");
+			this.expDate=Message.stringToDate("2018-05-08T11:30:36+0200");
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return;
 		}
 	}
-	// public JSONArray getMessageAsJson(int sequence) throws JSONException{
-	// JSONArray jArray= new JSONArray();
-	// Message[] msg = msgliste.toArray(new Message[msgliste.size()]);
-	//
-	// if (sequence == 0) {
-	// for (int i = 0; i < msg.length; i++) {
-	// jArray.put(msg[i].toJ());
-	// }
-	// return jArray;
-	// }else{
-	// for (int i=(sequence+1);i<msg.length;i++){
-	// jArray.put(msg[i].toJ());
-	// }
-	// return jArray;
-	// }
-	// }
-
 	/**
 	 * Eine Methode, die Nachrichten in Json Objekte umwandelt und ein Array aus
 	 * diesen Objekten ausgibt.

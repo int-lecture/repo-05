@@ -34,23 +34,8 @@ import org.codehaus.jettison.json.JSONObject;
  */
 @Path("")
 public class ServerResponse {
-	
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
-
-	/**
-	 * Ein Test.
-	 */
-	// @Path("/helloworld")
-
-	// @GET
-	// @Produces("text/plain")
-	// public String sayHello() {
-	// return "Hello World!\n";
-	// }
-	//	public ServerResponse(){
-	//
-	//	}
 
 	/**
 	 * Abfangen einer Message des Benutzers. Wenn das Format zulässig ist sendet
@@ -69,68 +54,6 @@ public class ServerResponse {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response putMessage(String jsonFormat)  {
-		
-		/**
-		 * Version ohne Token
-		 */
-		
-//		Message test=null;
-//		JSONObject j = null;
-//		try {
-//			j = new JSONObject(jsonFormat);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//			return Response.status(Status.BAD_REQUEST).build();
-//		}
-//		Date date=null;
-//		if(j.has("date")){
-//			try {
-//				date = Message.stringToDate(j.optString("date"));
-//			} catch (ParseException e) {
-//						e.printStackTrace();
-//			return Response.status(Status.BAD_REQUEST).build();
-//			}	
-//		}else{
-//			return Response.status(Status.BAD_REQUEST).build();
-//		}
-//		if(j.has("from")&&j.has("to")&&j.has("text")){
-//			try {
-//				test = new Message(j.getString("from"),
-//					   j.getString("to"), date,j.getString("text"),
-//					   j.optInt("sequence") );
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//				return Response.status(Status.BAD_REQUEST).build();
-//			}
-//
-//		}else{
-//			return Response.status(Status.BAD_REQUEST).build();
-//		}
-//
-//		if (Message.isJSONValid(jsonFormat)&&test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null) {
-//			//if(test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null){
-//			
-//			// Wenn der Benutzer nicht vorhanden ist wird dieser neu angelegt
-//			if (!map.containsKey(j.optString("to"))) {
-//				 map.put(j.optString("to"), new Benutzer(j.optString("to")));
-//			}
-//			//}else{
-//			//	return Response.status(Status.BAD_REQUEST).build();
-//			//}
-//			Benutzer benutzer = map.get(j.optString("to"));
-//			test = new Message(j.optString("from"), j.optString("to"), 
-//					   date, j.optString("text"), benutzer.sequence += 1);
-//			benutzer.msgliste.offer(test);
-//			try {
-//				return Response.status(Status.CREATED).entity
-//		               (test.datenKorrekt().toString()).build();
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//				return Response.status(Status.BAD_REQUEST).build();
-//			}
-//		} else {
-//			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
-//		}
 		Message test=null;
 		JSONObject j = null;
 		Date date=null;
@@ -164,26 +87,19 @@ public class ServerResponse {
 		}else{
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-
+		if (!map.containsKey(j.optString("to"))) {
+			 map.put(j.optString("to"), new Benutzer(j.optString("to")));
+		}
+		benutzer = map.get(j.optString("to"));
 		if (Message.isJSONValid(jsonFormat)&&Message.isTokenValid(test.token)
 				&&test.token!=null&&test.from!=null&&test.to!=null
-				&&test.date!=null&&test.text!=null ) {
-			//if(test.from!=null&&test.to!=null&&test.date!=null&&test.text!=null){
+				&&test.date!=null&&test.text!=null&&test.date.before(benutzer.expDate) ) {
 			
-			// Wenn der Benutzer nicht vorhanden ist wird dieser neu angelegt
-			if (!map.containsKey(j.optString("to"))) {
-				 map.put(j.optString("to"), new Benutzer(j.optString("to")));
-			}
-			//}else{
-			//	return Response.status(Status.BAD_REQUEST).build();
-			//}
-			benutzer = map.get(j.optString("to"));
-			if(test.date.equals(benutzer.expDate)&&test.date.after(benutzer.expDate)){
-				return Response.status(Status.UNAUTHORIZED).build();
-				}
 			test = new Message(j.optString("token"),j.optString("from"), j.optString("to"), 
 					   date, j.optString("text"), benutzer.sequence += 1);
 						benutzer.msgliste.offer(test);
+		
+			
 
 			try {
 				return Response.status(Status.CREATED).entity
@@ -193,11 +109,13 @@ public class ServerResponse {
 				return Response.status(Status.BAD_REQUEST).build();
 			}
 			
-			}else if(!Message.isTokenValid(test.token)){
+		}else if(test.date.equals(benutzer.expDate)||test.date.after(benutzer.expDate)){
+				return Response.status(Status.UNAUTHORIZED).build();
+				}else if(!Message.isTokenValid(test.token)){
 				
 				return Response.status(Status.UNAUTHORIZED).build();
 				} else {
-			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
+		return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 }
 
