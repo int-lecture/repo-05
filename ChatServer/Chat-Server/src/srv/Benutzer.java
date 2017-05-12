@@ -1,12 +1,16 @@
 
 package srv;
 
+import java.text.ParseException;
 import java.util.ArrayDeque;
 //import java.util.ArrayList;
 //import java.util.LinkedList;
 //import java.util.List;
 //import java.util.Queue;
 import java.util.Date;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -39,6 +43,12 @@ public class Benutzer {
 	public Benutzer(String name) {
 		this.name = name;
 		this.sequence = 0;
+		try {
+			this.expDate=Message.stringToDate("2010-03-30T17:00:00Z");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return;
+		}
 	}
 	// public JSONArray getMessageAsJson(int sequence) throws JSONException{
 	// JSONArray jArray= new JSONArray();
