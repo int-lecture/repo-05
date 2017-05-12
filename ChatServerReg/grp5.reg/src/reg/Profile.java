@@ -17,10 +17,11 @@ public class Profile {
 	private String userEmail;
 	/** Token SessionID*/
 	private String token;
+	/** Kontaktliste*/
+	private List<String> contacts = new ArrayList<>();
 
-	private List<String> contact = new ArrayList<>();
 
-    // Speichert ein Profil auch das Token?
+	/** Profil erstellen*/
 	public Profile(String pseudonym, String passwort, String userEmail) {
 		this.pseudonym = pseudonym;
 		this.passwort = passwort;
@@ -44,12 +45,22 @@ public class Profile {
 		return this.token;
 	}
 
+	public void addContact(String contact){
+		if(!contacts.contains(contact)){
+			contacts.add(contact);
+		}
+	}
+
+	//TODO Token aktualisieren?
+	/*public void addNewToken(String token){}*/
+
+
 
 	public JSONObject profileToJson() throws JSONException{
 		JSONObject j = new JSONObject();
 		j.put("name", this.pseudonym);
 		j.put("email", this.userEmail);
-		j.put("contact", Arrays.toString(contact.toArray(new String[contact.size()])));
+		j.put("contact", Arrays.toString(contacts.toArray(new String[contacts.size()])));
 
 		return j;
 	}

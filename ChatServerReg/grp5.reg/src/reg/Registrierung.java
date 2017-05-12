@@ -23,7 +23,7 @@ public class Registrierung {
 
 	//TODO lokale Liste von Benutzernamen und Passwörtern(hashen!)
 	static List<Profile> profile = new ArrayList<>();
-	
+
 	/**
 	 *
 	 * @param jsonFormat
