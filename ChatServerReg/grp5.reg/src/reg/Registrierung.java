@@ -17,6 +17,9 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+
 
 
 @Path("/")
@@ -130,12 +133,27 @@ public class Registrierung {
     			for(Profile profil:profile){
 					if(j.optString("getownprofile").equals(profil.getPseudonym())){
 						nutzer=profil;
-						return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
 					}
 				}
-    			return Response.status(Status.NO_CONTENT).build();
+    			//Token validierung
+    			if(nutzer!=null){
+    				String url = "http://localhost:5001";
+    				Client client = Client.create();
+    				ClientResponse response=client.resource(url + "/auth")
+    		            .accept(MediaType.APPLICATION_JSON)
+    		            .type(MediaType.APPLICATION_JSON)
+    		            .post(ClientResponse.class,j.toString());
 
-    			//TODO : Token validieren
+    				if (response.getStatus() != 200) {
+    					return Response.status(Status.BAD_REQUEST).build();
+    		        }
+//    				String output = response.getEntity(String.class);
+//    				JSONObject json = new JSONObject(output);
+    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
+
+    			}else{
+    				return Response.status(Status.NO_CONTENT).build();
+    			}
 
 //    			if(nutzer.getToken().equals(j.optString("token"))){
 //    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
