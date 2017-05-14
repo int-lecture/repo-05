@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;  // new import for @context (handling the header)
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -148,34 +149,35 @@ public class ServerResponse {
 //		// the HEADER_Feld
 //		String header  = j.optString("token");
 		
-
+		MultivaluedMap<String, String> mapForHeader = header.getRequestHeaders(); // create a map for the headers
 		if (map.containsKey(user_id)) { // check if the user already exists
 
-			if (!map.get(user_id).msgliste.isEmpty()) {
+			Benutzer benutzer = map.get(user_id);
+	
+			if (benutzer.authenticateUser(mapForHeader.get("Authorization").get(0))) { // Der Header ist der Authorization-Header gem‰ﬂ RFC2617
+			    if (!map.get(user_id).msgliste.isEmpty()) {
 
-				Benutzer benutzer = map.get(user_id);
-				JSONArray jArray;
-				jArray = benutzer.getMessageAsJson(sequence);
-				benutzer.deleteMsg(sequence);
-				if (jArray.length() == 0) {
-					return Response.status(Status.NO_CONTENT).build();
-				}
+				  //  Benutzer benutzer = map.get(user_id);
+			    	JSONArray jArray;
+				    jArray = benutzer.getMessageAsJson(sequence);
+			    	benutzer.deleteMsg(sequence);
+				   if (jArray.length() == 0) {
+					   return Response.status(Status.NO_CONTENT).build();
+				   }
 
-				return Response.status(Status.OK).entity(jArray.toString(3)).type(MediaType.APPLICATION_JSON).build();
-			} else {
+				   return Response.status(Status.OK).entity(jArray.toString(3)).type(MediaType.APPLICATION_JSON).build();
+			  }else {
 				return Response.status(Status.NO_CONTENT).build();
-			} // the user has no message
-		} else {
-
-			return Response.status(Status.NO_CONTENT).build();
-		} // the user doesn't exist
+			  } // the user has no message
+			} else {
+				return Response.status(Response.Status.UNAUTHORIZED).build();
+	        } // authentication failed
 		
+	    } else {
+		    return Response.status(Response.Status.BAD_REQUEST).entity("no User found.").build();
+       } // the user doesn't exist
 		
-		// TODO  write a Method to handle header 
-		
-		
-		
-		
+	
 	}
 
 	/**
@@ -187,9 +189,9 @@ public class ServerResponse {
 	@GET
 	@Path("/messages/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMessage(@PathParam("user_id") String user_id) throws JSONException {
+	public Response getMessage(@PathParam("user_id") String user_id ,  @Context HttpHeaders header) throws JSONException {
 
-		return getMessage(user_id, 0, null);
+		return getMessage(user_id, 0, header);
 	}
 
 }
