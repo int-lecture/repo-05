@@ -2,6 +2,7 @@ package reg;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,13 +22,20 @@ import org.codehaus.jettison.json.JSONObject;
 @Path("/")
 public class Registrierung {
 
-	//TODO lokale Liste von Benutzernamen und Passwörtern(hashen!)
+	//TODO Passwörter hashen.
+
+	/** Passwörter der registrierten User*/
+
+	static HashMap<String,String> userPw= new HashMap<>();
+
+	/** Profile der registrierten User*/
+
 	static List<Profile> profile = new ArrayList<>();
-	
+
 	/**
-	 *
-	 * @param jsonFormat
-	 * @return
+	 * Registriert einen neuen User.
+	 * @param jsonFormat Daten die für die Registrierung notwendig sind.
+	 * @return Response HTTP Antwort
 	 * @throws JSONException
 	 */
 
@@ -47,20 +55,23 @@ public class Registrierung {
 					for(Profile profil:profile){
 						if(j.optString("pseudonym").equals(profil.getPseudonym())){
 							//Es gibt Pseudonym bereits
-							return Response.status(Status.BAD_REQUEST).build();
+							//TODO: 418 "I'm a teapot"
+							return Response.status(Status.NOT_ACCEPTABLE).build();
 						}
 					}
 					//Pseudonym gibt es nicht
-					Profile profil = new Profile(j.optString("pseudonym"),j.optString("passwort"),j.optString("user"));
+					Profile profil = new Profile(j.optString("pseudonym"),j.optString("user"));
 					profile.add(profil);
+					userPw.put(j.optString("user"), j.optString("passwort"));
 					JSONObject ok = new JSONObject();
 					ok.put("success", true);
 					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
 
 				//Wenn Liste leer
 				}else{
-					Profile profil = new Profile(j.optString("pseudonym"),j.optString("passwort"),j.optString("user"));
+					Profile profil = new Profile(j.optString("pseudonym"),j.optString("user"));
 					profile.add(profil);
+					userPw.put(j.optString("user"), j.optString("passwort"));
 					JSONObject ok = new JSONObject();
 					ok.put("success", true);
 					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
@@ -96,33 +107,43 @@ public class Registrierung {
         return true;
     }
 
+    /**
+     * Liefert bei gültigem Token das Profil des Users zurück.
+     * @param jsonFormat Daten die für die Profilanfrage notwending sind.
+     * @return Response HTTP Antwort.
+     * @throws JSONException
+     */
 
     @Path("profile")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getProfile(String jsonFormat) throws JSONException{
+
+
     	if(isJSONValid(jsonFormat)){
     		JSONObject j = new JSONObject(jsonFormat);
-    		if(j.optString("token")!=null && j.optString("getownprofile")!=null ){
+
+    		if(!j.isNull("token") && !j.isNull("getownprofile") ){
     			Profile nutzer=null;
+
     			for(Profile profil:profile){
 					if(j.optString("getownprofile").equals(profil.getPseudonym())){
 						nutzer=profil;
+						return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
 					}
 				}
-    			//Nutzer gibt es nicht
-    			if(nutzer==null){
-    				return Response.status(Status.BAD_REQUEST).entity("Unknown").build();
-    			}
-    			//Nutzer registriert
-    			if(nutzer.getToken().equals(j.optString("token"))){
-    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
-    			}
+    			return Response.status(Status.NO_CONTENT).build();
+
+    			//TODO : Token validieren
+
+//    			if(nutzer.getToken().equals(j.optString("token"))){
+//    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
+//    			}
     		}
-    		return Response.status(Status.BAD_REQUEST).entity("Bad token lol").build();
+    		return Response.status(Status.BAD_REQUEST).build();
     	}else{
-    		return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
+    		return Response.status(Status.BAD_REQUEST).build();
     	}
 
     }

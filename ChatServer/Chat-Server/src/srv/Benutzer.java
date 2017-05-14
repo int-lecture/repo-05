@@ -112,4 +112,14 @@ public class Benutzer {
 			}
 		}
 	}
+	
+	// TODO the method to authenticate users
+	/*
+	 * // to authenticate the user
+	 * @return true or false depending on whether the user entered the right 
+	 */
+	public boolean authenticateUser(String token){
+		return false;
+		
+	}
 }
