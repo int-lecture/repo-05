@@ -22,7 +22,7 @@ import com.sun.jersey.api.client.Client;
  * Ein einfacher Chat-Benutzer, der einen Namen als Attribut hat. In dieser
  * Klasse werden auch die Sequenznummern und Nachrichtenliste verwaltet.
  *
- * @author Gruppe5
+ * @author Santino Nobile, Sergej Kryvoruchko
  *
  **/
 public class Benutzer {
@@ -44,7 +44,6 @@ public class Benutzer {
 	ArrayDeque<Message> msgliste = new ArrayDeque<>();
 
 	/** Benutzer erstellen */
-
 	public Benutzer(String name) {
 		this.name = name;
 		this.sequence = 0;
