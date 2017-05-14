@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -11,59 +12,88 @@ public class Profile {
 
 	/** Pseudonym */
 	private String pseudonym;
-	/** Passwort */
-	private String passwort;
 	/** User Email */
 	private String userEmail;
-	/** Token SessionID*/
+	/** Token */
 	private String token;
-	/** Kontaktliste*/
+	/** Kontaktliste */
 	private List<String> contacts = new ArrayList<>();
 
-
-	/** Profil erstellen*/
-	public Profile(String pseudonym, String passwort, String userEmail) {
+	/** Profil erstellen */
+	public Profile(String pseudonym, String userEmail) {
 		this.pseudonym = pseudonym;
-		this.passwort = passwort;
 		this.userEmail = userEmail;
 	}
-	public Profile(String pseudonym,String passwort,String userEmail,String token){
-		this(pseudonym,passwort,userEmail);
-		this.token=token;
+
+	/** Profil erstellen mit Token */
+	public Profile(String pseudonym, String userEmail, String token) {
+		this(pseudonym, userEmail);
+		this.token = token;
 	}
 
-
-	public String getPseudonym(){
+	public String getPseudonym() {
 		return this.pseudonym;
 	}
 
-	public String getUserEmail(){
+	public String getUserEmail() {
 		return this.userEmail;
 	}
 
-	public String getToken(){
+	public String getToken() {
 		return this.token;
 	}
 
-	public void addContact(String contact){
-		if(!contacts.contains(contact)){
+	/**
+	 * Fügt Kontakt hinzu wenn nicht vorhanden.
+	 *
+	 * @param contact Kontakt der hinzugefügt werden soll.
+	 */
+	public void addContact(String contact) {
+		if (!contacts.contains(contact)) {
 			contacts.add(contact);
 		}
 	}
 
-	//TODO Token aktualisieren?
-	/*public void addNewToken(String token){}*/
+	/**
+	 * Löscht Kontakt.
+	 *
+	 * @param contact Kontakt der gelöscht werden soll.
+	 */
+	public void removeContact(String contact) {
+		contacts.remove(contact);
+	}
 
+	/**
+	 * Wandelt die Kontaktliste in ein JSONArray um.
+	 *
+	 * @param contacts Kontaktliste.
+	 * @return JSONArray
+	 */
+	private JSONArray contactsToJSONArray(String[] contacts) {
+		JSONArray j = new JSONArray();
 
-
-	public JSONObject profileToJson() throws JSONException{
-		JSONObject j = new JSONObject();
-		j.put("name", this.pseudonym);
-		j.put("email", this.userEmail);
-		j.put("contact", Arrays.toString(contacts.toArray(new String[contacts.size()])));
-
+		for (int i = 0; i < contacts.length; i++) {
+			j.put(contacts[i]);
+		}
 		return j;
 	}
 
+	/**
+	 * Speichert die Profildaten in ein JSONObject.
+	 *
+	 * @return JSONObject
+	 * @throws JSONException
+	 */
+	public JSONObject profileToJson() throws JSONException {
+		JSONObject j = new JSONObject();
+		j.put("name", this.pseudonym);
+		j.put("email", this.userEmail);
+		// Zum Testen
+		// contacts.add("john");
+		// contacts.add("susi");
+		j.put("contact", contactsToJSONArray(contacts.toArray(new String[contacts.size()])));
+
+		return j;
+	}
 
 }
