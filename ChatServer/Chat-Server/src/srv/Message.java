@@ -52,12 +52,8 @@ public class Message {
     
     public Message(String token, String from, String to, Date date, String text,
             int sequence) {
+    	this(from,to,date,text,sequence);
     	this.token=token;
-        this.from = from;
-        this.to = to;
-        this.date = date;
-        this.text = text;
-        this.sequence = sequence;
     }
     
     /**
@@ -155,7 +151,8 @@ public class Message {
      */
     public JSONObject toJson() throws JSONException{
     	JSONObject obj = new JSONObject();
-
+    	
+    	obj.put("token",this.token);
     	obj.put("from", from);
     	obj.put("to", to);
     	obj.put("date",dateToString(this.date));
