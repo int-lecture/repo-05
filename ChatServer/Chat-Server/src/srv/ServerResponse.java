@@ -1,4 +1,5 @@
 package srv;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,8 +22,11 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-/**Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
+
+/**
+ * Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
  * implementiert.
+ * 
  * @author Gruppe5
  */
 /*
@@ -45,7 +49,8 @@ public class ServerResponse {
 	 * @throws ParseException
 	 *             - Bei Problemen mit Umwandeln.
 	 */
-	private static final String uri ="http://141.19.142.57:5001";
+	private static final String uri = "http://141.19.142.57:5001";
+
 	@PUT
 	@Path("/send")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -55,7 +60,8 @@ public class ServerResponse {
 		JSONObject j = null;
 		Date date = null;
 		Benutzer benutzer = null;
-		Client client =Client.create();
+		Client client = Client.create();
+		
 		try {
 			j = new JSONObject(jsonFormat);
 		} catch (JSONException e) {
@@ -88,47 +94,46 @@ public class ServerResponse {
 		}
 		benutzer = map.get(j.optString("to"));
 		if (Message.isJSONValid(jsonFormat) && Message.isTokenValid(message.token) && message.token != null
-				&& message.from != null && message.to != null && message.date != null && message.text != null
-				) {
-			JSONObject json=new JSONObject();
+				&& message.from != null && message.to != null && message.date != null && message.text != null) {
+			JSONObject json = new JSONObject();
 			try {
 				json.put("token", j.optString("token"));
 				json.put("pseudonym", j.optString("from"));
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-//				String response=client.resource(uri +"/auth")
-//					.accept(MediaType.APPLICATION_JSON)
-//					.type(MediaType.APPLICATION_JSON)
-//					.post(String.class,json);
-//			JSONObject antw;
-//			client.destroy();
-//			try {
-//				antw = new JSONObject(response);
-//			} catch (JSONException e2) {
-//				
-//				e2.printStackTrace();
-//				return Response.status(Status.BAD_REQUEST).build();
-//			}
-//			try {
-//				if(!antw.get("success").equals("true")){
-//					return Response.status(Status.UNAUTHORIZED).build();
-//					}
-//			} catch (JSONException e1) {
-//				e1.printStackTrace();
-//				return Response.status(Status.BAD_REQUEST).build();
-//			}
-			ClientResponse response = client.resource(uri +"/auth").accept(MediaType.APPLICATION_JSON).
-					type(MediaType.APPLICATION_JSON).post(ClientResponse.class,json.toString());
-					
-//			try {
-//				benutzer.expDate=Message.stringToDate(antw.optString("expire-date"));
-//			} catch (ParseException e1) {
-//				
-//				e1.printStackTrace();
-//				return Response.status(Status.BAD_REQUEST).build();
-//			}
-			if(response.getStatus()!=200){
+			// String response=client.resource(uri +"/auth")
+			// .accept(MediaType.APPLICATION_JSON)
+			// .type(MediaType.APPLICATION_JSON)
+			// .post(String.class,json);
+			// JSONObject antw;
+			// client.destroy();
+			// try {
+			// antw = new JSONObject(response);
+			// } catch (JSONException e2) {
+			//
+			// e2.printStackTrace();
+			// return Response.status(Status.BAD_REQUEST).build();
+			// }
+			// try {
+			// if(!antw.get("success").equals("true")){
+			// return Response.status(Status.UNAUTHORIZED).build();
+			// }
+			// } catch (JSONException e1) {
+			// e1.printStackTrace();
+			// return Response.status(Status.BAD_REQUEST).build();
+			// }
+			ClientResponse response = client.resource(uri + "/auth").accept(MediaType.APPLICATION_JSON)
+					.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json.toString());
+
+			// try {
+			// benutzer.expDate=Message.stringToDate(antw.optString("expire-date"));
+			// } catch (ParseException e1) {
+			//
+			// e1.printStackTrace();
+			// return Response.status(Status.BAD_REQUEST).build();
+			// }
+			if (response.getStatus() != 200) {
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
 			message = new Message(j.optString("token"), j.optString("from"), j.optString("to"), date,
@@ -140,15 +145,17 @@ public class ServerResponse {
 				e.printStackTrace();
 				return Response.status(Status.BAD_REQUEST).build();
 			}
-//		} else if (message.date.equals(benutzer.expDate) || message.date.after(benutzer.expDate)) {
-//			return Response.status(Status.UNAUTHORIZED).build();
-//		} else if (!Message.isTokenValid(message.token)) {
-//
-//			return Response.status(Status.UNAUTHORIZED).build();
+			// } else if (message.date.equals(benutzer.expDate) ||
+			// message.date.after(benutzer.expDate)) {
+			// return Response.status(Status.UNAUTHORIZED).build();
+			// } else if (!Message.isTokenValid(message.token)) {
+			//
+			// return Response.status(Status.UNAUTHORIZED).build();
 		} else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 	}
+
 	/**
 	 * Der Client holt die Nachrichten vom Server mit GET über --> @Path.
 	 *
@@ -165,26 +172,25 @@ public class ServerResponse {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence,
 			@Context HttpHeaders header) {
+
 		JSONArray jArray = null;
 		MultivaluedMap<String, String> hmap = header.getRequestHeaders();
-		if(hmap.get("Authorization")==null||hmap.get("Authorization").isEmpty()){
-			return Response.status(Status.UNAUTHORIZED).build();
-			}
 		String token = hmap.get("Authorization").get(0).substring(6);
 		Client client = Client.create();
 		String antwort;
 		JSONObject antwJ;
+
+		if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 		if (map.containsKey(user_id)) {
 			if (!map.get(user_id).msgliste.isEmpty()) {
-				System.out.println(hmap.get("Authorization").get(0).substring(6));
-				System.out.println(hmap.toString());
 				Benutzer benutzer = map.get(user_id);
 				if (token.equals(benutzer.token)) {
 					if (new Date().before(benutzer.expDate)) {
 						try {
 							jArray = benutzer.getMessageAsJson(sequence);
 						} catch (JSONException e) {
-
 							e.printStackTrace();
 							return Response.status(Status.BAD_REQUEST).build();
 						}
@@ -196,7 +202,6 @@ public class ServerResponse {
 							return Response.status(Status.OK).entity(jArray.toString(3))
 									.type(MediaType.APPLICATION_JSON).build();
 						} catch (JSONException e) {
-
 							e.printStackTrace();
 							return Response.status(Status.BAD_REQUEST).build();
 						}
@@ -253,6 +258,7 @@ public class ServerResponse {
 		}
 		return Response.status(Status.NO_CONTENT).build();
 	}
+
 	/**
 	 * @see getMessage oben.
 	 * @param user_id

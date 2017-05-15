@@ -21,7 +21,7 @@ import org.codehaus.jettison.json.JSONException;
  * @author Santino Nobile, Sergej Kryvoruchko
  *
  **/
-public class Benutzer {
+	public class Benutzer {
 	/** Name des Benutzers */
 	String name;
 	
@@ -66,8 +66,9 @@ public class Benutzer {
 			 * die Nachricht wird sonst ständig ausgegeben
 			 */
 		} else if (sequence < this.sequence) {
-			for (int i=0; i<msgArray.length;i++) {
+			for (int i = 1, n = this.sequence; n > sequence; n--) {
 				msgArray[msgArray.length - i] = copy.pollLast();
+				i++;
 			}
 			for (Message msg: msgArray) {
 				jArray.put(msg.toJson());
