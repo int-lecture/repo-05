@@ -1,4 +1,3 @@
-
 package srv;
 
 import java.text.ParseException;
@@ -64,8 +63,7 @@ public class Message {
      * @param date Date.
      * @param text Contents.
      */
-    // i added the toke here  
-    public Message(String token ,String from, String to, Date date, String text) {
+    public Message(String from, String to, Date date, String text) {
         this(from, to, date, text, 0);
     }
 
@@ -104,9 +102,7 @@ public class Message {
      * @param token - das übergebene Token
      * @return wahr oder falsch - Token ist formatiert oder nicht.
      */
-    // i added  @SuppressWarnings("deprecation")
-    @SuppressWarnings("deprecation")
-	public static boolean isTokenValid(String token){
+    public static boolean isTokenValid(String token){
     	return Base64.isArrayByteBase64(token.getBytes());
     }
     /**

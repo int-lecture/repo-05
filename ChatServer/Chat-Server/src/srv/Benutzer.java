@@ -1,10 +1,6 @@
-
 package srv;
 
-//import java.awt.PageAttributes.MediaType;
-import javax.ws.rs.core.MediaType;  // accept(MediaType.APPLICATION_JSON)
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 //import java.util.ArrayList;
 //import java.util.LinkedList;
@@ -12,11 +8,11 @@ import java.util.ArrayDeque;
 //import java.util.Queue;
 import java.util.Date;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-
-import com.sun.jersey.api.client.Client;
 
 /**
  * Ein einfacher Chat-Benutzer, der einen Namen als Attribut hat. In dieser
@@ -31,8 +27,6 @@ public class Benutzer {
 	
 	/**Token des Benutzers */
 	String token;
-	
-	private static final String url = "http://localhost:5001";
 	
 	/** Auslaufdatum des Tokens*/
 	Date expDate;
@@ -116,51 +110,5 @@ public class Benutzer {
 				}
 			}
 		}
-	}
-	
-	// TODO the method to authenticate users
-	/*
-	 * // to authenticate the user
-	 * @return true or false depending on whether the user entered the right 
-	 */
-	public boolean authenticateUser(String token) {
-		SimpleDateFormat sdf = new SimpleDateFormat(Message.ISO8601);
-		System.out.println(token);
-		if (this.token == token) {
-			if (sdf.format(new Date()).compareTo(expDate.toString()) < 0) {
-				return true;
-			}
-		}
-
-		JSONObject obj = new JSONObject();
-		try {
-			obj.put("token", token);
-			obj.put("pseudonym", name);
-			System.out.println("Authentifiziere "+name+"  "+ token);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		Client client = Client.create();
-		String response;
-		try{
-		response = client.resource(url + "/auth").accept(MediaType.APPLICATION_JSON)
-				.type(MediaType.APPLICATION_JSON).post(String.class, obj.toString());
-		client.destroy();
-		}catch(RuntimeException e){
-			return false;
-		}
-		try {
-			JSONObject jo = new JSONObject(response);
-			if (jo.get("success").equals("true")) {
-				this.expDate = sdf.parse(jo.getString("expire-date"));
-				return true;
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 }
