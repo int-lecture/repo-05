@@ -41,12 +41,7 @@ public class Benutzer {
 	public Benutzer(String name) {
 		this.name = name;
 		this.sequence = 0;
-		try {
-			this.expDate=Message.stringToDate("2018-05-08T11:30:36+0200");
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return;
-		}
+		
 	}
 	/**
 	 * Eine Methode, die Nachrichten in Json Objekte umwandelt und ein Array aus
