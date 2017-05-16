@@ -19,11 +19,9 @@ import javax.ws.rs.core.Response.Status;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 
 /**
- * Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
+ * Dienste des Servers. Hier wird das Protokoll fï¿½r den Nachrichten-Transfer
  * implementiert.
  * 
  * @author Gruppe5
@@ -31,12 +29,12 @@ import com.sun.jersey.api.client.ClientResponse;
 @Path("")
 public class Chat_Server {
 	
-	private static final String uri = "http://141.19.142.57:5001";
+	protected static final String uri = "http://141.19.142.57:5001";
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
-	 * Abfangen einer Message des Benutzers. Wenn das Format zulässig ist sendet
-	 * der Server 201.Wenn das Format nicht zulässig ist sendet der Server 400.
+	 * Abfangen einer Message des Benutzers. Wenn das Format zulï¿½ssig ist sendet
+	 * der Server 201.Wenn das Format nicht zulï¿½ssig ist sendet der Server 400.
 	 *
 	 * @param jsonFormat
 	 *            - Nachricht des Benutzers.
@@ -55,8 +53,7 @@ public class Chat_Server {
 		JSONObject j = null;
 		Date date = null;
 		Benutzer benutzer = null;
-		Client client = Client.create();
-		
+	
 		try {
 			j = new JSONObject(jsonFormat);
 		} catch (JSONException e) {
@@ -88,20 +85,10 @@ public class Chat_Server {
 			map.put(j.optString("to"), new Benutzer(j.optString("to")));
 		}
 		benutzer = map.get(j.optString("to"));
+		benutzer.setToken(j.optString("token"));
 		if (Message.isJSONValid(jsonFormat) && Message.isTokenValid(message.token) && message.token != null
 				&& message.from != null && message.to != null && message.date != null && message.text != null) {
-			JSONObject json = new JSONObject();
-			try {
-				json.put("token", j.optString("token"));
-				json.put("pseudonym", j.optString("from"));
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}
-			ClientResponse response = client.resource(uri + "/auth").accept(MediaType.APPLICATION_JSON)
-					.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json.toString());
-
-			client.destroy();
-			if (response.getStatus() != 200) {
+			if(!benutzer.auth()){
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
 			message = new Message(j.optString("token"), j.optString("from"), j.optString("to"), date,
@@ -119,7 +106,7 @@ public class Chat_Server {
 	}
 
 	/**
-	 * Der Client holt die Nachrichten vom Server mit GET über --> @Path.
+	 * Der Client holt die Nachrichten vom Server mit GET ï¿½ber --> @Path.
 	 *
 	 * @param user_id
 	 *            - Der Name des Benutzers
@@ -137,28 +124,14 @@ public class Chat_Server {
 		JSONArray jArray = null;
 		MultivaluedMap<String, String> hmap = header.getRequestHeaders();
 		String token = hmap.get("Authorization").get(0).substring(6);
-		Client client = Client.create();
-		ClientResponse antwort;
-
-		if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
+			if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		if (map.containsKey(user_id)) {
 			if (!map.get(user_id).msgliste.isEmpty()) {
 				Benutzer benutzer = map.get(user_id);
-				JSONObject jsonobject = new JSONObject();
-				try {
-					jsonobject.put("token", token);
-					jsonobject.put("pseudonym", benutzer.name);
-				} catch (JSONException e) {
-					e.printStackTrace();
-					return Response.status(Status.BAD_REQUEST).build();
-				}
-				antwort = client.resource(uri + "/auth").accept(MediaType.APPLICATION_JSON)
-						.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonobject.toString());
-				client.destroy();
-				
-				if (antwort.getStatus() != 200) {
+				benutzer.setToken(token);
+				if(!benutzer.auth()){
 					return Response.status(Status.UNAUTHORIZED).build();
 				}try {
 							jArray = benutzer.getMessageAsJson(sequence);
