@@ -1,6 +1,8 @@
 package reg;
 
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +27,9 @@ import com.sun.jersey.api.client.ClientResponse;
 @Path("/")
 public class Registrierung {
 
-	//TODO Passwörter hashen.
+	//TODO:Methoden fÃ¼r hashen
 
-	/** Passwörter der registrierten User*/
+	/** Passwï¿½rter der registrierten User*/
 
 	static HashMap<String,String> userPw= new HashMap<>();
 
@@ -37,7 +39,7 @@ public class Registrierung {
 
 	/**
 	 * Registriert einen neuen User.
-	 * @param jsonFormat Daten die für die Registrierung notwendig sind.
+	 * @param jsonFormat Daten die fï¿½r die Registrierung notwendig sind.
 	 * @return Response HTTP Antwort
 	 * @throws JSONException
 	 */
@@ -65,7 +67,19 @@ public class Registrierung {
 					//Pseudonym gibt es nicht
 					Profile profil = new Profile(j.optString("pseudonym"),j.optString("user"));
 					profile.add(profil);
-					userPw.put(j.optString("user"), j.optString("passwort"));
+					String userData="";
+					try {
+						userData = SecurityHelper.hashPassword(j.optString("password"));
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvalidKeySpecException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					userData = userData+j.optString("user");
+					StorageProviderMongoDB.storePassword(userData);
+					userPw.put(j.optString("user"),userData);
 					JSONObject ok = new JSONObject();
 					ok.put("success", true);
 					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
@@ -74,6 +88,18 @@ public class Registrierung {
 				}else{
 					Profile profil = new Profile(j.optString("pseudonym"),j.optString("user"));
 					profile.add(profil);
+					String userData="";
+					try {
+						userData = SecurityHelper.hashPassword(j.optString("password"));
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvalidKeySpecException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					userData = userData+j.optString("user");
+					StorageProviderMongoDB.storePassword(userData);
 					userPw.put(j.optString("user"), j.optString("passwort"));
 					JSONObject ok = new JSONObject();
 					ok.put("success", true);
@@ -90,11 +116,11 @@ public class Registrierung {
 
 	}
 	 /**
-     * Prüft ob der übergebene String in ein JSONObjekt
+     * Prï¿½ft ob der ï¿½bergebene String in ein JSONObjekt
      * abgespeichert werden kann.
      * Quelle:http://stackoverflow.com/questions/10174898/how-to-check-whether-a-given-string-is-valid-json-in-java
      *
-     * @param test - Der String der geprüft wird.
+     * @param test - Der String der geprï¿½ft wird.
      * @return boolean - wahr oder falsch.
      */
     public static boolean isJSONValid(String test) {
@@ -111,8 +137,8 @@ public class Registrierung {
     }
 
     /**
-     * Liefert bei gültigem Token das Profil des Users zurück.
-     * @param jsonFormat Daten die für die Profilanfrage notwending sind.
+     * Liefert bei gï¿½ltigem Token das Profil des Users zurï¿½ck.
+     * @param jsonFormat Daten die fï¿½r die Profilanfrage notwending sind.
      * @return Response HTTP Antwort.
      * @throws JSONException
      */
@@ -147,17 +173,11 @@ public class Registrierung {
     				if (response.getStatus() != 200) {
     					return Response.status(Status.BAD_REQUEST).build();
     		        }
-//    				String output = response.getEntity(String.class);
-//    				JSONObject json = new JSONObject(output);
     				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
 
     			}else{
     				return Response.status(Status.NO_CONTENT).build();
     			}
-
-//    			if(nutzer.getToken().equals(j.optString("token"))){
-//    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
-//    			}
     		}
     		return Response.status(Status.BAD_REQUEST).build();
     	}else{
