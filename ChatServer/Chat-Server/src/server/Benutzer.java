@@ -1,4 +1,4 @@
-package srv;
+package server;
 
 import java.text.ParseException;
 import java.util.ArrayDeque;

@@ -1,4 +1,4 @@
-package srv;
+package server;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class GrizzlyServer {
 
 	public static void main(String[] args) throws IllegalArgumentException, IOException {
 		final String baseUri = "http://localhost:5000/";
-		final String paket = "srv";
+		final String paket = "server";
 
 		final Map<String, String> initParams = new HashMap<String, String>();
 

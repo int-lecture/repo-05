@@ -1,4 +1,4 @@
-package srv;
+package server;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,7 +48,6 @@ public class Message {
         this.text = text;
         this.sequence = sequence;
     }
-    
     public Message(String token, String from, String to, Date date, String text,
             int sequence) {
     	this(from,to,date,text,sequence);
@@ -140,7 +139,6 @@ public class Message {
     	obj.put("sequence",this.sequence);
     	return obj;
     }
-
     /**
      * Speichert die Daten eines Messageobjekts
      * in ein JSONObjekt
@@ -150,7 +148,6 @@ public class Message {
      */
     public JSONObject toJson() throws JSONException{
     	JSONObject obj = new JSONObject();
-    	
     	obj.put("token",this.token);
     	obj.put("from", from);
     	obj.put("to", to);

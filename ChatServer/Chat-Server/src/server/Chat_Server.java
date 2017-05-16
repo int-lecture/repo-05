@@ -1,7 +1,6 @@
-package srv;
+package server;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,12 +28,10 @@ import com.sun.jersey.api.client.ClientResponse;
  * 
  * @author Gruppe5
  */
-/*
- * Ohne @Path("") Fehler: The ResourceConfig instance does not contain any root
- * resource classes.
- */
 @Path("")
-public class ServerResponse {
+public class Chat_Server {
+	
+	private static final String uri = "http://141.19.142.57:5001";
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
@@ -49,8 +46,6 @@ public class ServerResponse {
 	 * @throws ParseException
 	 *             - Bei Problemen mit Umwandeln.
 	 */
-	private static final String uri = "http://141.19.142.57:5001";
-
 	@PUT
 	@Path("/send")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -102,37 +97,10 @@ public class ServerResponse {
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-			// String response=client.resource(uri +"/auth")
-			// .accept(MediaType.APPLICATION_JSON)
-			// .type(MediaType.APPLICATION_JSON)
-			// .post(String.class,json);
-			// JSONObject antw;
-			// client.destroy();
-			// try {
-			// antw = new JSONObject(response);
-			// } catch (JSONException e2) {
-			//
-			// e2.printStackTrace();
-			// return Response.status(Status.BAD_REQUEST).build();
-			// }
-			// try {
-			// if(!antw.get("success").equals("true")){
-			// return Response.status(Status.UNAUTHORIZED).build();
-			// }
-			// } catch (JSONException e1) {
-			// e1.printStackTrace();
-			// return Response.status(Status.BAD_REQUEST).build();
-			// }
 			ClientResponse response = client.resource(uri + "/auth").accept(MediaType.APPLICATION_JSON)
 					.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json.toString());
 
-			// try {
-			// benutzer.expDate=Message.stringToDate(antw.optString("expire-date"));
-			// } catch (ParseException e1) {
-			//
-			// e1.printStackTrace();
-			// return Response.status(Status.BAD_REQUEST).build();
-			// }
+			client.destroy();
 			if (response.getStatus() != 200) {
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
@@ -145,12 +113,6 @@ public class ServerResponse {
 				e.printStackTrace();
 				return Response.status(Status.BAD_REQUEST).build();
 			}
-			// } else if (message.date.equals(benutzer.expDate) ||
-			// message.date.after(benutzer.expDate)) {
-			// return Response.status(Status.UNAUTHORIZED).build();
-			// } else if (!Message.isTokenValid(message.token)) {
-			//
-			// return Response.status(Status.UNAUTHORIZED).build();
 		} else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
@@ -172,13 +134,11 @@ public class ServerResponse {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence,
 			@Context HttpHeaders header) {
-
 		JSONArray jArray = null;
 		MultivaluedMap<String, String> hmap = header.getRequestHeaders();
 		String token = hmap.get("Authorization").get(0).substring(6);
 		Client client = Client.create();
-		String antwort;
-		JSONObject antwJ;
+		ClientResponse antwort;
 
 		if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
 			return Response.status(Status.UNAUTHORIZED).build();
@@ -186,9 +146,21 @@ public class ServerResponse {
 		if (map.containsKey(user_id)) {
 			if (!map.get(user_id).msgliste.isEmpty()) {
 				Benutzer benutzer = map.get(user_id);
-				if (token.equals(benutzer.token)) {
-					if (new Date().before(benutzer.expDate)) {
-						try {
+				JSONObject jsonobject = new JSONObject();
+				try {
+					jsonobject.put("token", token);
+					jsonobject.put("pseudonym", benutzer.name);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					return Response.status(Status.BAD_REQUEST).build();
+				}
+				antwort = client.resource(uri + "/auth").accept(MediaType.APPLICATION_JSON)
+						.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonobject.toString());
+				client.destroy();
+				
+				if (antwort.getStatus() != 200) {
+					return Response.status(Status.UNAUTHORIZED).build();
+				}try {
 							jArray = benutzer.getMessageAsJson(sequence);
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -205,58 +177,13 @@ public class ServerResponse {
 							e.printStackTrace();
 							return Response.status(Status.BAD_REQUEST).build();
 						}
-					}
-
-				} else {
-					JSONObject jsonobject = new JSONObject();
-					try {
-						jsonobject.put("token", token);
-						jsonobject.put("pseudonym", benutzer.name);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						return Response.status(Status.BAD_REQUEST).build();
-					}
-					antwort = client.resource(uri + "/auth").accept(MediaType.APPLICATION_JSON)
-							.type(MediaType.APPLICATION_JSON).post(String.class, jsonobject);
-					client.destroy();
-
-					try {
-						antwJ = new JSONObject(antwort);
-
-					} catch (JSONException e) {
-						e.printStackTrace();
-						return Response.status(Status.BAD_REQUEST).build();
-
-					}
-					if (antwJ.optString("success").equals("true")) {
-						try {
-							benutzer.expDate = Message.stringToDate(antwJ.optString("expire-date"));
-						} catch (ParseException e) {
-							e.printStackTrace();
-							return Response.status(Status.BAD_REQUEST).build();
-						}
-
-						try {
-							return Response.status(Status.OK).entity(jArray.toString(3))
-									.type(MediaType.APPLICATION_JSON).build();
-						} catch (JSONException e) {
-							e.printStackTrace();
-							return Response.status(Status.BAD_REQUEST).build();
-						}
-
-					} else {
-						return Response.status(Status.UNAUTHORIZED).build();
-					}
-
-				}
-			} else {
+				 } else {
 				return Response.status(Status.NO_CONTENT).build();
 			}
 		} else {
 
 			return Response.status(Status.NO_CONTENT).build();
 		}
-		return Response.status(Status.NO_CONTENT).build();
 	}
 
 	/**
