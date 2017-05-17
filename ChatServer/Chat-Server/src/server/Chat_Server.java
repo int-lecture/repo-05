@@ -30,8 +30,7 @@ import com.sun.jersey.api.container.MappableContainerException;
  */
 @Path("")
 public class Chat_Server {
-	
-	protected static final String uri = "http://141.19.142.57:5001";
+	protected static final String uri = "http://localhost:5001";
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
@@ -57,9 +56,9 @@ public class Chat_Server {
 		Benutzer benutzer = null;
 		if(Message.validierung(jsonFormat)){
 		try {
-			date = Message.stringToDate(j.optString("date"));
 			j = new JSONObject(jsonFormat);
-		} catch (JSONException | ParseException e1) {
+			date = Message.stringToDate(j.optString("date"));
+			} catch (JSONException | ParseException e1) {
 			e1.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
@@ -72,13 +71,10 @@ public class Chat_Server {
 			if(!benutzer.auth()){
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
-			}catch (MappableContainerException e){
+			}catch (RuntimeException e){
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
-			}catch(RuntimeException e){
-			e.printStackTrace();
-			return Response.status(Status.UNAUTHORIZED).build();
-		}
+			}
 			
 			message = new Message(j.optString("token"), j.optString("from"), j.optString("to"), date,
 					j.optString("text"), benutzer.sequence += 1);
@@ -144,11 +140,9 @@ public class Chat_Server {
 				return Response.status(Status.NO_CONTENT).build();
 			}
 		} else {
-
 			return Response.status(Status.NO_CONTENT).build();
 		}
 	}
-
 	/**
 	 * @see getMessage oben.
 	 * @param user_id

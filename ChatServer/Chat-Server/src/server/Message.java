@@ -140,7 +140,11 @@ public class Message {
     	obj.put("sequence",this.sequence);
     	return obj;
     }
-    
+    /**
+     * Prüft ob die Nachricht korrekt formatiert ist.
+     * @param nachricht
+     * @return
+     */
     public static boolean validierung(String nachricht){
     	Message message= null;
     	JSONObject test;
@@ -156,10 +160,7 @@ public class Message {
 				date = Message.stringToDate(test.optString("date"));
 				message = new Message(test.getString("token"), test.getString("from"), test.getString("to"), date,
 						test.getString("text"), test.optInt("sequence"));
-			} catch (ParseException e) {
-				e.printStackTrace();
-				return false;
-			} catch (JSONException e) {
+			} catch (ParseException |JSONException e) {
 				e.printStackTrace();
 				return false;
 			}
