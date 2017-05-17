@@ -36,7 +36,7 @@ public class Chat_Server {
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
 	 * Abfangen einer Message des Benutzers. Wenn das Format zul�ssig ist sendet
-	 * der Server 201.Wenn das Format nicht zul�ssig ist sendet der Server 400.
+	 * der Server 201.Wenn das Format nicht zulässig ist sendet der Server 400.
 	 *
 	 * @param jsonFormat
 	 *            - Nachricht des Benutzers.
@@ -55,28 +55,27 @@ public class Chat_Server {
 		JSONObject j = null;
 		Date date = null;
 		Benutzer benutzer = null;
-		try {
-			j = new JSONObject(jsonFormat);
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		if(Message.validierung(jsonFormat)){
-	
+		try {
+			date = Message.stringToDate(j.optString("date"));
+			j = new JSONObject(jsonFormat);
+		} catch (JSONException | ParseException e1) {
+			e1.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		if (!map.containsKey(j.optString("to"))) {
 			map.put(j.optString("to"), new Benutzer(j.optString("to")));
 		}
-		benutzer = map.get(j.optString("to"));
-		benutzer.setToken(j.optString("token"));
-		try{
+			benutzer = map.get(j.optString("to"));
+			benutzer.setToken(j.optString("token"));
+			try{
 			if(!benutzer.auth()){
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
-			
-		}catch (MappableContainerException e){
+			}catch (MappableContainerException e){
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
-		}catch(RuntimeException e){
+			}catch(RuntimeException e){
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
@@ -95,7 +94,7 @@ public class Chat_Server {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 	}
-
+	
 	/**
 	 * Der Client holt die Nachrichten vom Server mit GET �ber --> @Path.
 	 *
