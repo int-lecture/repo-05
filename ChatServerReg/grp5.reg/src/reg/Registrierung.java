@@ -27,12 +27,6 @@ import com.sun.jersey.api.client.ClientResponse;
 @Path("/")
 public class Registrierung {
 
-	//TODO:Methoden für hashen
-
-	/** Passw�rter der registrierten User*/
-
-	static HashMap<String,String> userPw= new HashMap<>();
-
 	/** Profile der registrierten User*/
 
 	static List<Profile> profile = new ArrayList<>();
@@ -76,7 +70,6 @@ public class Registrierung {
 				}
 				userData = userData + j.optString("user");
 				StorageProviderMongoDB.storePassword(userData);
-				userPw.put(j.optString("user"), j.optString("passwort"));
 				JSONObject ok = new JSONObject();
 				ok.put("success", true);
 				return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
@@ -137,18 +130,23 @@ public class Registrierung {
 				}
     			//Token validierung
     			if(nutzer!=null){
-    				String url = "http://localhost:5001";
-    				Client client = Client.create();
-    				ClientResponse response=client.resource(url + "/auth")
-    		            .accept(MediaType.APPLICATION_JSON)
-    		            .type(MediaType.APPLICATION_JSON)
-    		            .post(ClientResponse.class,j.toString());
+//    				String url = "http://localhost:5001";
+//    				Client client = Client.create();
+//    				ClientResponse response=client.resource(url + "/auth")
+//    		            .accept(MediaType.APPLICATION_JSON)
+//    		            .type(MediaType.APPLICATION_JSON)
+//    		            .post(ClientResponse.class,j.toString());
+//
+//    				if (response.getStatus() != 200) {
+//    					return Response.status(Status.BAD_REQUEST).build();
+//    		        }
+//    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
 
-    				if (response.getStatus() != 200) {
-    					return Response.status(Status.BAD_REQUEST).build();
-    		        }
-    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
-
+    				String data=StorageProviderMongoDB.retrieveToken(j.optString("token"), j.optString("pseudonym"));
+    				if(data!=null){
+    					return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
+    				}
+    				return Response.status(Status.UNAUTHORIZED).build();
     			}else{
     				return Response.status(Status.NO_CONTENT).build();
     			}
