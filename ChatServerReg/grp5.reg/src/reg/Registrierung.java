@@ -49,70 +49,44 @@ public class Registrierung {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 
-	public Response register(String jsonFormat) throws JSONException{
-		if(isJSONValid(jsonFormat)){
+	public Response register(String jsonFormat) throws JSONException {
+		if (isJSONValid(jsonFormat)) {
 			JSONObject j = new JSONObject(jsonFormat);
-			if(j.optString("pseudonym")!=null && j.optString("passwort")!=null &&j.optString("user")!=null){
-				//Wenn Liste nicht leer
-				if(!profile.isEmpty()){
-					//Schauen ob es Pseudonym schon gibt
+			if (j.optString("pseudonym") != null && j.optString("passwort") != null && j.optString("user") != null) {
+				// Wenn Liste nicht leer
+				if (!profile.isEmpty()) {
+					// Schauen ob es Pseudonym schon gibt
 
-					for(Profile profil:profile){
-						if(j.optString("pseudonym").equals(profil.getPseudonym())){
-							//Es gibt Pseudonym bereits
-							//TODO: 418 "I'm a teapot"
+					for (Profile profil : profile) {
+						if (j.optString("pseudonym").equals(profil.getPseudonym())) {
+							// Es gibt Pseudonym bereits
+							// TODO: 418 "I'm a teapot"
 							return Response.status(Status.NOT_ACCEPTABLE).build();
 						}
 					}
-					//Pseudonym gibt es nicht
-					Profile profil = new Profile(j.optString("pseudonym"),j.optString("user"));
-					profile.add(profil);
-					String userData="";
-					try {
-						userData = SecurityHelper.hashPassword(j.optString("password"));
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvalidKeySpecException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					userData = userData+j.optString("user");
-					StorageProviderMongoDB.storePassword(userData);
-					userPw.put(j.optString("user"),userData);
-					JSONObject ok = new JSONObject();
-					ok.put("success", true);
-					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
-
-				//Wenn Liste leer
-				}else{
-					Profile profil = new Profile(j.optString("pseudonym"),j.optString("user"));
-					profile.add(profil);
-					String userData="";
-					try {
-						userData = SecurityHelper.hashPassword(j.optString("password"));
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvalidKeySpecException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					userData = userData+j.optString("user");
-					StorageProviderMongoDB.storePassword(userData);
-					userPw.put(j.optString("user"), j.optString("passwort"));
-					JSONObject ok = new JSONObject();
-					ok.put("success", true);
-					return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
 				}
+				Profile profil = new Profile(j.optString("pseudonym"), j.optString("user"));
+				profile.add(profil);
+				String userData = "";
+				try {
+					userData = SecurityHelper.hashPassword(j.optString("password"));
+				} catch (NoSuchAlgorithmException | InvalidKeySpecException i) {
+					// TODO Auto-generated catch block
+					i.printStackTrace();
+				}
+				userData = userData + j.optString("user");
+				StorageProviderMongoDB.storePassword(userData);
+				userPw.put(j.optString("user"), j.optString("passwort"));
+				JSONObject ok = new JSONObject();
+				ok.put("success", true);
+				return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
 
-			}else{
+			} else {
 				return Response.status(Status.BAD_REQUEST).build();
 			}
-		}else{
+		} else {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-
 
 	}
 	 /**
