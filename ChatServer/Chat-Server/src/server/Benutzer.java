@@ -46,10 +46,6 @@ import com.sun.jersey.api.client.ClientResponse;
 		this.sequence = 0;
 		
 	}
-	
-	
-	
-	
 	/**
 	 * Eine Methode, die Nachrichten in Json Objekte umwandelt und ein Array aus
 	 * diesen Objekten ausgibt.
@@ -128,11 +124,13 @@ import com.sun.jersey.api.client.ClientResponse;
 			e.printStackTrace();
 			return false;
 		}
+		
 		ClientResponse antwort=client.resource(Chat_Server.uri + "/auth")
 				.accept(MediaType.APPLICATION_JSON)
 				.type(MediaType.APPLICATION_JSON)
 				.post(ClientResponse.class, object.toString());
 		client.destroy();
+		
 		if(antwort.getStatus()!=200) {
 			return false;
 		}

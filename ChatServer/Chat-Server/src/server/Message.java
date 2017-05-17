@@ -4,6 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -77,10 +80,10 @@ public class Message {
                 from, to, sdf.format(new Date()), text);
     }
     /**
-     * Prüft ob der übergebene String in ein JSONObjekt
+     * Prï¿½ft ob der ï¿½bergebene String in ein JSONObjekt
      * abgespeichert werden kann.
      *
-     * @param test - Der String der geprüft wird.
+     * @param test - Der String der geprï¿½ft wird.
      * @return boolean - wahr oder falsch.
      */
     public static boolean isJSONValid(String test) {
@@ -97,13 +100,11 @@ public class Message {
     }
     
     /**
-     * Prüft ob das übergebene Token gemäß Base64 formatiert ist.
-     * @param token - das übergebene Token
+     * Prï¿½ft ob das ï¿½bergebene Token gemï¿½ï¿½ Base64 formatiert ist.
+     * @param token - das ï¿½bergebene Token
      * @return wahr oder falsch - Token ist formatiert oder nicht.
      */
-    public static boolean isTokenValid(String token){
-    	return Base64.isArrayByteBase64(token.getBytes());
-    }
+   
     /**
      * Wandelt ein Date Objekt in ein String um.
      * @param date
@@ -138,6 +139,39 @@ public class Message {
     	obj.put("date",sdf.format(date));
     	obj.put("sequence",this.sequence);
     	return obj;
+    }
+    
+    public static boolean validierung(String nachricht){
+    	Message message= null;
+    	JSONObject test;
+    	Date date=null;
+		try {
+			test = new JSONObject(nachricht);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+    	if (test.has("from") && test.has("to")&& test.has("date") && test.has("text") && test.has("token") ) {
+			try {
+				date = Message.stringToDate(test.optString("date"));
+				message = new Message(test.getString("token"), test.getString("from"), test.getString("to"), date,
+						test.getString("text"), test.optInt("sequence"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return false;
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return false;
+			}
+			if (Message.isJSONValid(nachricht) && message.token != null && message.from != null 
+					&& message.to != null && message.date != null && message.text != null) {
+				return true;
+			}
+		} else {
+			return false;
+		}
+    	
+    	return true;
     }
     /**
      * Speichert die Daten eines Messageobjekts

@@ -20,6 +20,8 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.sun.jersey.api.container.MappableContainerException;
+
 /**
  * Dienste des Servers. Hier wird das Protokoll f�r den Nachrichten-Transfer
  * implementiert.
@@ -53,44 +55,32 @@ public class Chat_Server {
 		JSONObject j = null;
 		Date date = null;
 		Benutzer benutzer = null;
-	
 		try {
 			j = new JSONObject(jsonFormat);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		if (j.has("date")) {
-			try {
-				date = Message.stringToDate(j.optString("date"));
-			} catch (ParseException e) {
-				e.printStackTrace();
-				return Response.status(Status.BAD_REQUEST).build();
-			}
-		} else {
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		if (j.has("from") && j.has("to") && j.has("text") && j.has("token")) {
-			try {
-				message = new Message(j.getString("token"), j.getString("from"), j.getString("to"), date,
-						j.getString("text"), j.optInt("sequence"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-				return Response.status(Status.BAD_REQUEST).build();
-			}
-		} else {
-			return Response.status(Status.BAD_REQUEST).build();
-		}
+		if(Message.validierung(jsonFormat)){
+	
 		if (!map.containsKey(j.optString("to"))) {
 			map.put(j.optString("to"), new Benutzer(j.optString("to")));
 		}
 		benutzer = map.get(j.optString("to"));
 		benutzer.setToken(j.optString("token"));
-		if (Message.isJSONValid(jsonFormat) && Message.isTokenValid(message.token) && message.token != null
-				&& message.from != null && message.to != null && message.date != null && message.text != null) {
+		try{
 			if(!benutzer.auth()){
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
+			
+		}catch (MappableContainerException e){
+			e.printStackTrace();
+			return Response.status(Status.UNAUTHORIZED).build();
+		}catch(RuntimeException e){
+			e.printStackTrace();
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+			
 			message = new Message(j.optString("token"), j.optString("from"), j.optString("to"), date,
 					j.optString("text"), benutzer.sequence += 1);
 			benutzer.msgliste.offer(message);
@@ -100,7 +90,8 @@ public class Chat_Server {
 				e.printStackTrace();
 				return Response.status(Status.BAD_REQUEST).build();
 			}
-		} else {
+		}
+		 else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 	}
