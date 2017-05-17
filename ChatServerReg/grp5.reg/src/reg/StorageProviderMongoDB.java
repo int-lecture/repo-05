@@ -59,7 +59,7 @@ class StorageProviderMongoDB {
      * @param password
      */
     public static synchronized void deletePassword(String password){
-    	MongoCollection<Document> collection = database.getCollection("password");
+    	MongoCollection<Document> collection = database.getCollection("account");
     	collection.deleteOne(eq("password",password));
     }
 
