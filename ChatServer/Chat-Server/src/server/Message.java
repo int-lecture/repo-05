@@ -80,7 +80,7 @@ public class Message {
                 from, to, sdf.format(new Date()), text);
     }
     /**
-     * Pr�ft ob der �bergebene String in ein JSONObjekt
+     * Prüft ob der übergebene String in ein JSONObjekt
      * abgespeichert werden kann.
      *
      * @param test - Der String der gepr�ft wird.
@@ -98,12 +98,6 @@ public class Message {
         }
         return true;
     }
-    
-    /**
-     * Pr�ft ob das �bergebene Token gem�� Base64 formatiert ist.
-     * @param token - das �bergebene Token
-     * @return wahr oder falsch - Token ist formatiert oder nicht.
-     */
    
     /**
      * Wandelt ein Date Objekt in ein String um.

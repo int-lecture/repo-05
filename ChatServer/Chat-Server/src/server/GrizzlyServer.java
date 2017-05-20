@@ -24,8 +24,8 @@ public class GrizzlyServer {
 		System.out.println("Starte grizzly...");
 		SelectorThread threadSelector = GrizzlyWebContainerFactory.create(baseUri, initParams);
 
-		System.out.printf("Grizzly läuft unter %s%n", baseUri);
-		System.out.println("[ENTER] drücken, um Grizzly zu beenden");
+		System.out.printf("Grizzly lÃ¤uft unter %s%n", baseUri);
+		System.out.println("[ENTER] drÃ¼cken, um Grizzly zu beenden");
 
 		System.in.read();
 		threadSelector.stopEndpoint();

@@ -1,5 +1,4 @@
 package server;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,9 +18,6 @@ import javax.ws.rs.core.Response.Status;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-
-import com.sun.jersey.api.container.MappableContainerException;
-
 /**
  * Dienste des Servers. Hier wird das Protokoll f�r den Nachrichten-Transfer
  * implementiert.
@@ -30,7 +26,6 @@ import com.sun.jersey.api.container.MappableContainerException;
  */
 @Path("")
 public class Chat_Server {
-	protected static final String uri = "http://localhost:5001";
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
@@ -64,7 +59,7 @@ public class Chat_Server {
 		}
 		if (!map.containsKey(j.optString("to"))) {
 			map.put(j.optString("to"), new Benutzer(j.optString("to")));
-		}
+			}
 			benutzer = map.get(j.optString("to"));
 			benutzer.setToken(j.optString("token"));
 			try{
@@ -75,9 +70,9 @@ public class Chat_Server {
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
 			}
-			
-			message = new Message(j.optString("token"), j.optString("from"), j.optString("to"), date,
-					j.optString("text"), benutzer.sequence += 1);
+			message = new Message(j.optString("token"), j.optString("from"),
+					j.optString("to"), date, j.optString("text"), 
+					benutzer.sequence += 1);
 			benutzer.msgliste.offer(message);
 			try {
 				return Response.status(Status.CREATED).entity(message.datenKorrekt().toString()).build();
