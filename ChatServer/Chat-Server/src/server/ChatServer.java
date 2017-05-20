@@ -25,7 +25,7 @@ import org.codehaus.jettison.json.JSONObject;
  * @author Gruppe5
  */
 @Path("")
-public class Chat_Server {
+public class ChatServer {
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
@@ -49,7 +49,7 @@ public class Chat_Server {
 		JSONObject j = null;
 		Date date = null;
 		Benutzer benutzer = null;
-		if(Message.validierung(jsonFormat)){
+		if(Message.isMessageValid(jsonFormat)){
 		try {
 			j = new JSONObject(jsonFormat);
 			date = Message.stringToDate(j.optString("date"));

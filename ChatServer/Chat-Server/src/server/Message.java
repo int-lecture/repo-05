@@ -139,7 +139,7 @@ public class Message {
      * @param nachricht
      * @return
      */
-    public static boolean validierung(String nachricht){
+    public static boolean isMessageValid(String nachricht){
     	Message message= null;
     	JSONObject test;
     	Date date=null;
