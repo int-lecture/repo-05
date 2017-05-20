@@ -19,7 +19,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 /**
- * Dienste des Servers. Hier wird das Protokoll f�r den Nachrichten-Transfer
+ * Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
  * implementiert.
  * 
  * @author Gruppe5
@@ -29,7 +29,7 @@ public class ChatServer {
 	/** Benutzerliste. */
 	static Map<String, Benutzer> map = new HashMap<>();
 	/**
-	 * Abfangen einer Message des Benutzers. Wenn das Format zul�ssig ist sendet
+	 * Abfangen einer Message des Benutzers. Wenn das Format zulässig ist sendet
 	 * der Server 201.Wenn das Format nicht zulässig ist sendet der Server 400.
 	 *
 	 * @param jsonFormat
