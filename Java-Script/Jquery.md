@@ -13,5 +13,18 @@
 * Eventhandling ?
 * Interaktion mit AJAX -->
 * Hat eine sehr große Fülle an JavaScript-Plugins (unter anderem für die Erstellung von Nutzer-Interfaces) 
-<br />
- (Quelle: http://www.site-do.ru/js/jquery1.php)
+<br /> (Quelle: http://www.site-do.ru/js/jquery1.php)
+
+### Syntax von jQuery
+
+ $("selector").aktion("Eigenschaften_der_Aktion");
+ 
+ * Mehrere Selectoren durch Kommata, sowie mehrere Aktionen durch "."-Schachtelung möglich:
+ 
+  $("selector1, selector2, ... selectorN").aktion.aktion2.aktion3("Eigenschaften_der_Aktion");
+ 
+ --> Selector: Elemente, die bearbeitet, manipuliert oder verändert werden sollen (HTML-Elemente)
+ -->
+ -->
+ 
+ 
