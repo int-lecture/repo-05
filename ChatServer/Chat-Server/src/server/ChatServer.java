@@ -87,7 +87,7 @@ public class ChatServer {
 	}
 	
 	/**
-	 * Der Client holt die Nachrichten vom Server mit GET �ber --> @Path.
+	 * Der Client holt die Nachrichten vom Server mit GET über --> @Path.
 	 *
 	 * @param user_id
 	 *            - Der Name des Benutzers
