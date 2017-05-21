@@ -19,7 +19,7 @@
 
 ### $("selector").aktion("Eigenschaften_der_Aktion");
  
- > Selector: Elemente, die bearbeitet, manipuliert oder verändert werden sollen (HTML-Elemente)
+ >Selector: Elemente, die bearbeitet, manipuliert oder verändert werden sollen (HTML-Elemente)
 
   * Mehrere Selectoren durch Kommata, mehrere Aktionen durch "."-Schachtelung, sowie mehrere Eigenschaften der Aktionen durch Kommata möglich:
 ```jquery  
