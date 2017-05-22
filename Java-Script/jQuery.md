@@ -16,7 +16,6 @@
 * Eventhandling --> Gut geignet für Reaktionen auf Events (Mausclicks, Mausbewegungen etc.)
 * Interaktion mit AJAX --> Eine Technologie, welche Interaktionen mit Server oder Webseite erlaubt, ohne die Seite neuladen zu müssen.
 * Hat eine sehr große Fülle an JavaScript-Plugins (unter anderem für die Erstellung von Nutzer-Interfaces) 
-<br /> (Quelle: http://www.site-do.ru/js/jquery1.php)
 
 ## Syntax von jQuery
 
@@ -34,4 +33,15 @@
  
  Ebenso wie in CSS kann man mit Hilfe von jQuery Mengen von Elementen/Objekten gleichzeitig mit einer Aktion bearbeiten oder verändern.
  
+ ## Einige Effekte von jQuery
  
+  * draggable() - Plugin: http://viralpatel.net/blogs/demo/drag-drop-example.html
+  Code: 
+  ```jQuery
+  function init(){
+    $("#les10_ex1").draggable();
+  }
+ ```
+ * fade
+ 
+Quellen: http://www.site-do.ru/js/jquery1.php
