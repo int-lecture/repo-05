@@ -115,5 +115,5 @@
  * https://jqueryui.com/
  * www.jquery.com
          
-         
-[![] (https://img.clipartfest.com/f3d3929542dfdb6a4761649c5b95ac48_vielen-dank-fr-eure-danke-fr-die-aufmerksamkeit-clipart_960-720.jpeg)](https://img.clipartfest.com/f3d3929542dfdb6a4761649c5b95ac48_vielen-dank-fr-eure-danke-fr-die-aufmerksamkeit-clipart_960-720.jpeg)
+ ![](https://img.clipartfest.com/f3d3929542dfdb6a4761649c5b95ac48_vielen-dank-fr-eure-danke-fr-die-aufmerksamkeit-clipart_960-720.jpeg)
+
