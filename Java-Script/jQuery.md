@@ -31,9 +31,22 @@
  
  
  ## jQuery und CSS
- 
  Ebenso wie in CSS kann man mit Hilfe von jQuery Mengen von Elementen/Objekten gleichzeitig mit einer Aktion bearbeiten oder verändern.
  
+  * Um CSS-style-Elemente zu beinflußen gibt es die .css() Methode
+  * css() - Methode gibt zurück oder setzt eine CSS-Eigenschaft:
+  * Syntax (zurück geben): 
+  ```jQuery
+    css("propertyname");
+  ```
+  * Syntax (setzen): 
+  ```jQuery
+    css("propertyname", "value");
+  ```
+  * Beispiel:
+  ```jQuery
+    $("p").css("background-color", "yellow");
+  ```
  ## jQuery und AJAX
  
   * Asynchronous JavaScript and XML.
@@ -91,13 +104,16 @@
     $(selector).hide(speed,callback);
   ```
   * Für viele weitere Effekte: 
-  [![jQuery](https://github.com/int-lecture/repo-05/blob/master/Java-Script/jQuery.png)](https://jqueryui.com/)
+  [![jQueryUI](https://github.com/int-lecture/repo-05/blob/master/Java-Script/jQueryUI.png)](https://jqueryui.com/)
   
- 
- 
-Quellen: http://www.site-do.ru/js/jquery1.php
-         https://codyhouse.co/demo/back-to-top/index.html
-         http://www.mkyong.com/jquery/jquery-fadein-fadeout-and-fadeto-example/
-         https://www.w3schools.com/jquery
-         http://viralpatel.net/blogs/implement-drag-and-drop-example-jquery-javascript-html/
+ Quellen:
+ * http://www.site-do.ru/js/jquery1.php
+ * https://codyhouse.co/demo/back-to-top/index.html
+ * http://www.mkyong.com/jquery/jquery-fadein-fadeout-and-fadeto-example/
+ * https://www.w3schools.com/jquery
+ * http://viralpatel.net/blogs/implement-drag-and-drop-example-jquery-javascript-html/
+ * https://jqueryui.com/
+ * www.jquery.com
          
+         
+[![] (https://img.clipartfest.com/f3d3929542dfdb6a4761649c5b95ac48_vielen-dank-fr-eure-danke-fr-die-aufmerksamkeit-clipart_960-720.jpeg)]
