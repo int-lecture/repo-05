@@ -4,7 +4,10 @@
 ## jQuery - eine JavaScript-Bibliothek
 
 * jQuery ist eine JavaScript-Bibliothek welche die Zusammenarbeit mit JavaScript, HTML und CSS sich zum Hauptaugenmerk macht und diese erleichtert.
+* Man muss es runterladen, um es nutzen zu können.
+* Um es angenehmer zu nutzen, sollte man die Bibliothek dorthin entpacken, wo die eigenen HTML-Dokumente liegen.
 
+[![jQuery](http://www.google.com.au/images/nav_logo7.png)](http://jquery.com/)
 
 ## Eigenschaften von jQuery
 
