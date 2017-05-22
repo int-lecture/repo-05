@@ -7,7 +7,7 @@
 * Man muss es runterladen, um es nutzen zu können.
 * Um es angenehmer zu nutzen, sollte man die Bibliothek dorthin entpacken, wo die eigenen HTML-Dokumente liegen.
 
-[![jQuery](http://www.google.com.au/images/nav_logo7.png)](http://jquery.com/)
+[![jQuery](https://github.com/int-lecture/repo-05/blob/master/Java-Script/jQuery.png)](http://jquery.com/)
 
 ## Eigenschaften von jQuery
 
