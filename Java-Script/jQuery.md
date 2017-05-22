@@ -36,12 +36,24 @@
  ## Einige Effekte von jQuery
  
   * draggable() - Plugin: http://viralpatel.net/blogs/demo/drag-drop-example.html
-  Code: 
+  * Beispiel-Code: 
   ```jQuery
   function init(){
     $("#les10_ex1").draggable();
   }
  ```
- * fade
+  * fadeIn(), fadeTo(), fadeOut() - http://www.mkyong.com/jquery/jquery-fadein-fadeout-and-fadeto-example/
+  * Beispiel-Code
+  ```jQuery
+    function fadeOutDiv(){
+        $('#les8_ex5').fadeOut(5000);
+    }
+    function fadeInDiv(){
+      $('#les8_ex5').fadeIn(5000);
+    }
+    function fadeToDiv(){
+      $('#les8_ex6').fadeTo(5000, 0.5);
+    }
+  ```
  
 Quellen: http://www.site-do.ru/js/jquery1.php
