@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -52,8 +53,11 @@ button {
   </nav>
   
   <!-- login-->
-  <div class="container">
-     <div class="container">
+  <div class="container-fluid">
+	<div class="container-fluid">
+	<div class="row">
+	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+
         <h1>Anmeldung</h1> <br>
   
    <form>
@@ -70,13 +74,16 @@ button {
 
    </form> 
   
-<!--<a href="file:///C:/Users/nguem/Downloads/Vorlesung%20drittes%20Semester/INT/INT_Projekt/registrierung.html"> Registrierung? </a> -->
-</div> 
-<!-- login--> 
-  
-  
-  <!-- Trigger the modal with a button -->
+	<!--<a href="file:///C:/Users/nguem/Downloads/Vorlesung%20drittes%20Semester/INT/INT_Projekt/registrierung.html"> Registrierung? </a> -->
+	<!-- Trigger the modal with a button -->
   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Registrieren?</button>
+	</div>
+	</div>
+	</div> 
+	<!-- login--> 
+  
+  
+  
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -95,17 +102,14 @@ button {
   <h1>Registrierung</h1>
   <br>
    <form>
-   Name <br>
-  <input type="text" name="firstname" placeholder="Nachname eingeben"><br>
-  Vorname <br>
-  <input type="text" name="firstname" placeholder="Vorname eingeben"><br>
-  Username<br>
-  <input type="text" name="firstname" placeholder="Username eingeben"> <br>
+  Pseudonym<br>
+  <input type="text" name="pseudonym" placeholder="Pseudonym eingeben"> <br>
   Password<br>
-  <input type="text" name="lastname" placeholder="Password eingeben"><br>
-  E-Mail Adresse <br>
-  <input type="text" name="firstname" placeholder="E-Mail Adresse eingeben"><br>
+  <input type="text" name="password" placeholder="Password eingeben"><br>
+  User Email <br>
+  <input type="text" name="user" placeholder="E-Mail Adresse eingeben"><br>
   <br>
+
   
   <p>Ich akzeptiere die AGBs<input type="checkbox" name="check" /></p>
       <p>Wenn Sie auf "Senden" klicken, stimmen Sie zu das diese Daten<br>
@@ -128,3 +132,4 @@ button {
   
   </body>
 </html>
+
