@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -72,7 +73,7 @@ public class Registrierung {
 				StorageProviderMongoDB.storePassword(userData);
 				JSONObject ok = new JSONObject();
 				ok.put("success", true);
-				return Response.status(Status.OK).entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
+				return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
 
 			} else {
 				return Response.status(Status.BAD_REQUEST).build();
@@ -144,7 +145,7 @@ public class Registrierung {
 
     				String data=StorageProviderMongoDB.retrieveToken(j.optString("token"), j.optString("pseudonym"));
     				if(data!=null){
-    					return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
+    					return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
     				}
     				return Response.status(Status.UNAUTHORIZED).build();
     			}else{
@@ -157,5 +158,30 @@ public class Registrierung {
     	}
 
     }
+
+
+	@OPTIONS
+	@Path("/register")
+	public Response optionsReg() {
+	    return Response.ok("")
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .build();
+	}
+
+	@OPTIONS
+	@Path("/profile")
+	public Response optionsProfile() {
+	    return Response.ok("")
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .build();
+	}
 
 }
