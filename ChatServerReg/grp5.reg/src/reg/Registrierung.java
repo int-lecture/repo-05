@@ -48,7 +48,7 @@ public class Registrierung {
 		if (isJSONValid(jsonFormat)) {
 			JSONObject j = new JSONObject(jsonFormat);
 			if (j.optString("pseudonym") != null && j.optString("passwort") != null && j.optString("user") != null) {
-				// Wenn Liste nicht leer
+				// Wenn Liste nicht leer!
 				if (!profile.isEmpty()) {
 					// Schauen ob es Pseudonym schon gibt
 
