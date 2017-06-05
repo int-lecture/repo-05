@@ -1,137 +1,89 @@
-
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login und Registrierung</title>
+	
+	<!-- muss vor bootstrap stehen! sonst: "Uncaught Error: Bootstrap's JavaScript requires jQuery"
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-    <!-- JQuery -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
 	<!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	
-	<script src="https://cdn.rawgit.com/lingtalfi/simpledrag/master/simpledrag.js"></script>
+
+	
 	
 	<style>
-body {
-    background-color: #80d0c7;
-}
+		body{
+			background: url(plan01.png);
+			background-image: url(plan01.png);
+			background-repeat: repeat;
+			background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+		}
 
-h1 {
-    color: maroon;
-    margin-left: 40px;
-}
-h2 {
-    color: blue;
-    margin-left: 40px;
-}
-
-nav {
-    padding: 60px;
-}
-button {
-    color: blue;
-}
-
-   </style>
-	
-  </head>
-  <body>
- 
-  <nav class="navbar navbar-default" >
-      <div class="container-fluid">
-         <div class="navbar-header">
-            <a class="navbar-brand" href="#">  <h2>Secure Messenger </h2></a> 
-         </div>
-      </div>
-  </nav>
-  
-  <!-- login-->
-  <div class="container-fluid">
-	<div class="container-fluid">
-	<div class="row">
-	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<form>
-   			<h1>Anmeldung</h1>
-   			<div class="form-group">
-           	<label for="user"><h3>Benutzername:</h3></label>
-		   <input type="user" class="form-control" id="user" placeholder="Namen eingeben..."> 
-		   </div>
-		   <div class="form-group">
-           <label for="password"><h3>Passwort:</h3></label>
-		   <input type="password" class="form-control" id="password" placeholder="Passwort eingeben...">
-		   <br/> 
-		   </div>
-		   <div class="btn-toolbar" >
-		   
-		   <div class= "btn-group btn-group-lg">
-		   <a href="chatBox1.html" type="button" class="btn btn-primary">Anmelden</a>
-		   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Registrieren?</button>
-		  
-		   </div>
-		   </div>
-		</form> 
-
-   
-  		
-	</div>
-	</div>
-	</div> 
-	<!-- login--> 
-  
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="Registrierung">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Secure Messenger</h4>
-        </div>
-        <div class="modal-body">
-         <!-- <p>Some text in the modal.</p> -->
-		 
-		   <div class="container">
-  <h1>Registrierung</h1>
-  <br>
-   <form>
-  Pseudonym<br>
-  <input type="text" name="pseudonym" placeholder="Pseudonym eingeben"> <br>
-  Password<br>
-  <input type="text" name="password" placeholder="Password eingeben"><br>
-  User Email <br>
-  <input type="text" name="user" placeholder="E-Mail Adresse eingeben"><br>
-  <br>
-
-  
-  <p>Ich akzeptiere die AGBs<input type="checkbox" name="check" /></p>
-      <p>Wenn Sie auf "Senden" klicken, stimmen Sie zu das diese Daten<br>
-         auf irgend einem fremdem Rechner gespeichert werden.</p>
-		<p><button type="submit" name="Submit" >Sign up</button></p>
- </form> 
- </div>
-	 </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
+       
       
-    </div>
-  </div>
-  
+
+	</style>
+
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+	
+		<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+		<form role="form" onsubmit='return onsubmitLog();' >
+		<h1>Anmelden</h1>
+		<div class="form-group">
+		<label for="benutzer">Email</label>
+		<input type="benutzer" class ="form-control" id="pn2" placeholder="Benutzernamen eingeben..." required>
+		<label for="passwort">Passwort</label>
+		<input type="password" class ="form-control" id="pw2" placeholder="Passwort eingeben..." required>
+		</div>
+		<button type="button" id="btn1" class="btn btn-success">Anmelden</button>
+		</form>
+		
+		<form onsubmit='return onsubmitReg();'>
+		<h1>Registrierung</h1>
+		<div class="form-group">
+		<label for="benutzer">Benutzer</label>
+		<input type="benutzer" class ="form-control" id="pn1" placeholder="Benutzernamen eingeben..." required>
+		<label for="e-mail">E-Mail</label>
+		<input type="e-mail" class ="form-control" id="email" placeholder="Ihre E-Mail..." required>
+		<label for="passwort">Passwort</label>
+		<input type="password" class ="form-control" id="pw1" placeholder="Passwort eingeben..." required>
+		<label for="passwort2">Passwort bestätigen</label>
+		<input type="password" class ="form-control" id="cp" placeholder="Bitte bestätigen Sie das Passwort..." required>
+		</div>
+		<p id="error1"></p>
+		<p id="error2"></p>
+		<button type="button" id="btn2" class="btn btn-primary">Registrierung</button>
+		</form>
+		</div>
+
+
+<script src = "registerMitJquery.js" ></script>
+<script src = "loginMitJquery.js" ></script>
+
+
+
+
+
 </div>
-  
-  
-  </body>
+	
+
+</div>
+	
+</body>
 </html>
-
-
-
