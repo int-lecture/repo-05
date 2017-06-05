@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,7 +22,7 @@ import org.codehaus.jettison.json.JSONObject;
 /**
  * Dienste des Servers. Hier wird das Protokoll für den Nachrichten-Transfer
  * implementiert.
- * 
+ *
  * @author Gruppe5
  */
 @Path("")
@@ -71,11 +72,11 @@ public class ChatServer {
 			return Response.status(Status.UNAUTHORIZED).build();
 			}
 			message = new Message(j.optString("token"), j.optString("from"),
-					j.optString("to"), date, j.optString("text"), 
+					j.optString("to"), date, j.optString("text"),
 					benutzer.sequence += 1);
 			benutzer.msgliste.offer(message);
 			try {
-				return Response.status(Status.CREATED).entity(message.datenKorrekt().toString()).build();
+				return Response.status(Status.CREATED).header("Access-Control-Allow-Origin", "*").entity(message.datenKorrekt().toString()).build();
 			} catch (JSONException e) {
 				e.printStackTrace();
 				return Response.status(Status.BAD_REQUEST).build();
@@ -85,7 +86,7 @@ public class ChatServer {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 	}
-	
+
 	/**
 	 * Der Client holt die Nachrichten vom Server mit GET über --> @Path.
 	 *
@@ -125,17 +126,17 @@ public class ChatServer {
 							return Response.status(Status.NO_CONTENT).build();
 						}
 						try {
-							return Response.status(Status.OK).entity(jArray.toString(3))
+							return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(jArray.toString(3))
 									.type(MediaType.APPLICATION_JSON).build();
 						} catch (JSONException e) {
 							e.printStackTrace();
 							return Response.status(Status.BAD_REQUEST).build();
 						}
 				 } else {
-				return Response.status(Status.NO_CONTENT).build();
+				return Response.status(Status.NO_CONTENT).header("Access-Control-Allow-Origin", "*").build();
 			}
 		} else {
-			return Response.status(Status.NO_CONTENT).build();
+			return Response.status(Status.NO_CONTENT).header("Access-Control-Allow-Origin", "*").build();
 		}
 	}
 	/**
@@ -150,6 +151,43 @@ public class ChatServer {
 	public Response getMessage(@PathParam("user_id") String user_id, @Context HttpHeaders header) throws JSONException {
 
 		return getMessage(user_id, 0, header);
+	}
+
+
+	@OPTIONS
+	@Path("/send")
+	public Response optionsReg() {
+	    return Response.ok("")
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .build();
+	}
+
+	@OPTIONS
+	@Path("/messages/{userid}/{sequenceNumber}")
+	public Response optionsProfileWithSeqNumber() {
+	    return Response.ok("")
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .build();
+	}
+
+	@OPTIONS
+	@Path("/messages/{userid}")
+	public Response optionsProfile() {
+		return Response.ok("")
+				.header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+				.header("Access-Control-Allow-Credentials", "true")
+				.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+				.header("Access-Control-Max-Age", "1209600")
+				.build();
 	}
 
 }

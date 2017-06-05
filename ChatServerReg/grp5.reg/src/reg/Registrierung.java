@@ -31,7 +31,7 @@ public class Registrierung {
 	/** Profile der registrierten User*/
 
 	static List<Profile> profile = new ArrayList<>();
-
+	StorageProviderMongoDB db = new StorageProviderMongoDB();
 	/**
 	 * Registriert einen neuen User.
 	 * @param jsonFormat Daten die f�r die Registrierung notwendig sind.
@@ -69,11 +69,11 @@ public class Registrierung {
 					// TODO Auto-generated catch block
 					i.printStackTrace();
 				}
-				userData = userData + j.optString("user");
-				StorageProviderMongoDB.storePassword(userData);
+				userData = userData + "_"+j.optString("user");
+				db.storePassword(userData);
 				JSONObject ok = new JSONObject();
 				ok.put("success", true);
-				return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(ok.toString()).type(MediaType.APPLICATION_JSON).build();
+				return Response.status(Status.OK).entity(ok.toString()).header("Access-Control-Allow-Origin", "*").type(MediaType.APPLICATION_JSON).build();
 
 			} else {
 				return Response.status(Status.BAD_REQUEST).build();
@@ -143,13 +143,13 @@ public class Registrierung {
 //    		        }
 //    				return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
 
-    				String data=StorageProviderMongoDB.retrieveToken(j.optString("token"), j.optString("pseudonym"));
+    				String data=db.retrieveToken(j.optString("token"), j.optString("pseudonym"));
     				if(data!=null){
-    					return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(nutzer.profileToJson().toString(3)).type(MediaType.APPLICATION_JSON).build();
+    					return Response.status(Status.OK).entity(nutzer.profileToJson().toString(3)).header("Access-Control-Allow-Origin", "*").type(MediaType.APPLICATION_JSON).build();
     				}
     				return Response.status(Status.UNAUTHORIZED).build();
     			}else{
-    				return Response.status(Status.NO_CONTENT).build();
+    				return Response.status(Status.NO_CONTENT).header("Access-Control-Allow-Origin", "*").build();
     			}
     		}
     		return Response.status(Status.BAD_REQUEST).build();
@@ -161,7 +161,7 @@ public class Registrierung {
 
 
 	@OPTIONS
-	@Path("/register")
+	@Path("register")
 	public Response optionsReg() {
 	    return Response.ok("")
 	            .header("Access-Control-Allow-Origin", "*")
@@ -173,7 +173,7 @@ public class Registrierung {
 	}
 
 	@OPTIONS
-	@Path("/profile")
+	@Path("profile")
 	public Response optionsProfile() {
 	    return Response.ok("")
 	            .header("Access-Control-Allow-Origin", "*")

@@ -22,22 +22,23 @@ class StorageProviderMongoDB {
 	private static MongoClient mongoClient = new MongoClient(connectionString);
 
 	/** Mongo database. */
-	private static MongoDatabase database = mongoClient.getDatabase("users");
+	private static MongoDatabase database = mongoClient.getDatabase("userbase");
 
 	/**
 	 * @see var.chat.server.persistence.StorageProvider#retrieveMessages(java.lang.String,
 	 *      long, boolean)
 	 */
 
-    public static synchronized void storePassword(String userData) {
+    public synchronized void storePassword(String userData) {
         MongoCollection<Document> collection = database.getCollection("account");
 
-        String [] string = userData.split(":");
-        Document doc = new Document("salt", string[1])
-                .append("password", string[2])
-                .append("username", string[3]);
+        String [] string = userData.split("_");
+        Document doc = new Document("storedPassword", string[0])
+                .append("user", string[1]);
+
         collection.insertOne(doc);
     }
+
 
     /**
      *
@@ -45,7 +46,7 @@ class StorageProviderMongoDB {
      * @param pseudonym
      * @return
      */
-    public static synchronized String retrieveToken(String token,String pseudonym){
+    public synchronized String retrieveToken(String token,String pseudonym){
     	MongoCollection<Document> collection = database.getCollection("token");
     	Document doc = collection.find(and(eq("pseudonym", pseudonym), eq("token", token))).first();
 		if (doc == null) {
@@ -58,7 +59,7 @@ class StorageProviderMongoDB {
      *
      * @param password
      */
-    public static synchronized void deletePassword(String password){
+    public synchronized void deletePassword(String password){
     	MongoCollection<Document> collection = database.getCollection("account");
     	collection.deleteOne(eq("password",password));
     }
