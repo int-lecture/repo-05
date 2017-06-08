@@ -16,7 +16,6 @@ public class GrizzlySrv {
 	public static void main(String[] args) throws IllegalArgumentException, IOException {
 		final String baseUri = "http://localhost:5002/";
 		final String paket = "reg";
-
 		final Map<String, String> initParams = new HashMap<String, String>();
 
 		initParams.put("com.sun.jersey.config.property.packages", paket);
@@ -32,6 +31,7 @@ public class GrizzlySrv {
 
 		System.out.println("Grizzly wurde beendet");
 		System.exit(0);
+
 
 	}
 

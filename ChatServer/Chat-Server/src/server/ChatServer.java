@@ -58,10 +58,10 @@ public class ChatServer {
 			e1.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if (!map.containsKey(j.optString("to"))) {
-			map.put(j.optString("to"), new Benutzer(j.optString("to")));
+		if (!map.containsKey(j.optString("from"))) {
+			map.put(j.optString("from"), new Benutzer(j.optString("from")));
 			}
-			benutzer = map.get(j.optString("to"));
+			benutzer = map.get(j.optString("from"));
 			benutzer.setToken(j.optString("token"));
 			try{
 			if(!benutzer.auth()){
@@ -106,6 +106,7 @@ public class ChatServer {
 		JSONArray jArray = null;
 		MultivaluedMap<String, String> hmap = header.getRequestHeaders();
 		String token = hmap.get("Authorization").get(0).substring(6);
+		System.out.println(token);
 			if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}

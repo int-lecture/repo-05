@@ -34,8 +34,9 @@ class StorageProviderMongoDB {
 
         String [] string = userData.split("_");
         Document doc = new Document("storedPassword", string[0])
-                .append("user", string[1]);
-
+                .append("user", string[1])
+        		.append("pseudonym",string[2]);
+        System.out.println(doc.getString("pseudonym"));
         collection.insertOne(doc);
     }
 
@@ -69,5 +70,7 @@ class StorageProviderMongoDB {
      */
     public void clearForTest() {
         database.getCollection("password").drop();
+        database.getCollection("account").drop();
+        database.getCollection("token").drop();
     }
 }

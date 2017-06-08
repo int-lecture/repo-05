@@ -69,7 +69,7 @@ public class Registrierung {
 					// TODO Auto-generated catch block
 					i.printStackTrace();
 				}
-				userData = userData + "_"+j.optString("user");
+				userData = userData + "_"+j.optString("user")+"_"+j.optString("pseudonym");
 				db.storePassword(userData);
 				JSONObject ok = new JSONObject();
 				ok.put("success", true);

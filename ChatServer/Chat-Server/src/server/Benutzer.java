@@ -17,10 +17,10 @@ import com.sun.jersey.api.client.ClientResponse;
 	public class Benutzer {
 	/** Name des Benutzers */
 	private String name;
-	
+
 	/**Token des Benutzers */
 	private String token;
-	
+
 	/** Auslaufdatum des Tokens*/
 	Date expDate;
 
@@ -34,20 +34,20 @@ import com.sun.jersey.api.client.ClientResponse;
 	public Benutzer(String name) {
 		this.name = name;
 		this.sequence = 0;
-		
+
 	}
 	/**die Uri die zur Authentifizierung verwendet wird. */
-	protected static final String uri = "http://localhost:5001";
-	
+	protected static final String uri = "http://141.19.142.59:5001";
+
 	/**
 	 * Setzt das Token des Benutzers.
 	 * @param token - Token, das gesetzt werden soll.
 	 */
 		public void setToken(String token) {
-		
+
 			this.token=token;
 		}
-	
+
 	/**
 	 * Eine Methode, die Nachrichten in Json Objekte umwandelt und ein Array aus
 	 * diesen Objekten ausgibt.
@@ -107,7 +107,7 @@ import com.sun.jersey.api.client.ClientResponse;
 		}
 	}
 	/**
-	 * Prüft ob der Benutzer sich mit dem Token 
+	 * Prüft ob der Benutzer sich mit dem Token
 	 * authentifizieren kann.
 	 * @return Authentifizierung klappt oder nicht.
 	 */
@@ -116,6 +116,7 @@ import com.sun.jersey.api.client.ClientResponse;
 		JSONObject object = new JSONObject();
 		try {
 			object.put("token", this.token);
+
 			object.put("pseudonym", this.name);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -126,12 +127,13 @@ import com.sun.jersey.api.client.ClientResponse;
 				.type(MediaType.APPLICATION_JSON)
 				.post(ClientResponse.class, object.toString());
 		client.destroy();
-		
+
 		if(antwort.getStatus()!=200) {
+			System.out.println(antwort.getStatus());
 			return false;
 		}
 		return true;
 	}
 
-	
+
 }
