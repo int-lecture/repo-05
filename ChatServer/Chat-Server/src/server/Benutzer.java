@@ -26,6 +26,7 @@ import com.sun.jersey.api.client.ClientResponse;
 
 	/** Sequenznummer */
 	int sequence;
+	String hashedPassword;
 
 	/** Nachrichtenliste */
 	ArrayDeque<Message> msgliste = new ArrayDeque<>();
@@ -36,6 +37,11 @@ import com.sun.jersey.api.client.ClientResponse;
 		this.sequence = 0;
 
 	}
+	public Benutzer(String name,String hashedPassword,String email){
+		this.name=name;
+		this.hashedPassword=hashedPassword;
+	}
+
 	/**die Uri die zur Authentifizierung verwendet wird. */
 	protected static final String uri = "http://141.19.142.59:5001";
 

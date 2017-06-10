@@ -15,7 +15,7 @@ import org.apache.commons.codec.binary.Base64;
 public class Message {
 
 	/** String der das Datum in ISO 8601 Format umwandelt. */
-	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 	/**Token des Benutzers*/
 	String token;
@@ -56,7 +56,7 @@ public class Message {
     	this(from,to,date,text,sequence);
     	this.token=token;
     }
-    
+
     /**
      * Create a new message.
      *
@@ -98,7 +98,7 @@ public class Message {
         }
         return true;
     }
-   
+
     /**
      * Wandelt ein Date Objekt in ein String um.
      * @param date
@@ -158,14 +158,14 @@ public class Message {
 				e.printStackTrace();
 				return false;
 			}
-			if (Message.isJSONValid(nachricht) && message.token != null && message.from != null 
+			if (Message.isJSONValid(nachricht) && message.token != null && message.from != null
 					&& message.to != null && message.date != null && message.text != null) {
 				return true;
 			}
 		} else {
 			return false;
 		}
-    	
+
     	return true;
     }
     /**

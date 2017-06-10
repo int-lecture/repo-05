@@ -1,5 +1,6 @@
 package server;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +28,8 @@ import org.codehaus.jettison.json.JSONObject;
  */
 @Path("")
 public class ChatServer {
-	/** Benutzerliste. */
-	static Map<String, Benutzer> map = new HashMap<>();
+
+	StorageProviderMongoDB db = new StorageProviderMongoDB();
 	/**
 	 * Abfangen einer Message des Benutzers. Wenn das Format zulässig ist sendet
 	 * der Server 201.Wenn das Format nicht zulässig ist sendet der Server 400.
@@ -45,7 +46,7 @@ public class ChatServer {
 	@Path("/send")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response putMessage(String jsonFormat) {
+	public Response putMessage(String jsonFormat) throws ParseException {
 		Message message = null;
 		JSONObject j = null;
 		Date date = null;
@@ -54,15 +55,20 @@ public class ChatServer {
 		try {
 			j = new JSONObject(jsonFormat);
 			date = Message.stringToDate(j.optString("date"));
-			} catch (JSONException | ParseException e1) {
+		} catch (JSONException | ParseException e1) {
 			e1.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if (!map.containsKey(j.optString("from"))) {
-			map.put(j.optString("from"), new Benutzer(j.optString("from")));
+
+			benutzer = db.retrieveUser(j.optString("from"));
+
+			//Wenn der User nicht in der DB ist
+			if(benutzer==null){
+				return Response.status(Status.UNAUTHORIZED).build();
 			}
-			benutzer = map.get(j.optString("from"));
+
 			benutzer.setToken(j.optString("token"));
+
 			try{
 			if(!benutzer.auth()){
 				return Response.status(Status.UNAUTHORIZED).build();
@@ -71,10 +77,12 @@ public class ChatServer {
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
 			}
+			ArrayList<Message> messageList= db.retrieveMessages(j.optString("to"), 0, false);
+			int index=messageList.size()-1;
 			message = new Message(j.optString("token"), j.optString("from"),
 					j.optString("to"), date, j.optString("text"),
-					benutzer.sequence += 1);
-			benutzer.msgliste.offer(message);
+					messageList.get(index).sequence+1);
+			db.storeMessages(message);
 			try {
 				return Response.status(Status.CREATED).header("Access-Control-Allow-Origin", "*").entity(message.datenKorrekt().toString()).build();
 			} catch (JSONException e) {
@@ -95,45 +103,48 @@ public class ChatServer {
 	 * @param sequence
 	 *            - Die Sequenznummer der letzten erhaltenen Nachricht.
 	 * @return Response - Antwort des Servers
+	 * @throws ParseException
 	 * @throws JSONException
 	 *             - Bei Problemen mit Json
 	 */
+	@SuppressWarnings("null")
 	@GET
 	@Path("/messages/{user_id}/{sequence_number}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence,
-			@Context HttpHeaders header) {
+			@Context HttpHeaders header) throws ParseException {
 		JSONArray jArray = null;
 		MultivaluedMap<String, String> hmap = header.getRequestHeaders();
 		String token = hmap.get("Authorization").get(0).substring(6);
 		System.out.println(token);
-			if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
+		if (hmap.get("Authorization") == null || hmap.get("Authorization").isEmpty()) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		if (map.containsKey(user_id)) {
-			if (!map.get(user_id).msgliste.isEmpty()) {
-				Benutzer benutzer = map.get(user_id);
+		Benutzer benutzer = db.retrieveUser(user_id);
+		if (benutzer != null) {
+			ArrayList<Message> messageList = db.retrieveMessages(user_id, sequence, true);
+			if (messageList != null) {
 				benutzer.setToken(token);
-				if(!benutzer.auth()){
+				if (!benutzer.auth()) {
 					return Response.status(Status.UNAUTHORIZED).build();
-				}try {
-							jArray = benutzer.getMessageAsJson(sequence);
-						} catch (JSONException e) {
-							e.printStackTrace();
-							return Response.status(Status.BAD_REQUEST).build();
-						}
-						benutzer.deleteMsg(sequence);
-						if (jArray.length() == 0) {
-							return Response.status(Status.NO_CONTENT).build();
-						}
-						try {
-							return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(jArray.toString(3))
-									.type(MediaType.APPLICATION_JSON).build();
-						} catch (JSONException e) {
-							e.printStackTrace();
-							return Response.status(Status.BAD_REQUEST).build();
-						}
-				 } else {
+				}
+				try {
+					for (Message m : messageList) {
+						jArray.put(m.toJson());
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					return Response.status(Status.BAD_REQUEST).build();
+				}
+				try {
+					System.out.println(jArray.toString());
+					return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*")
+							.entity(jArray.toString(3)).type(MediaType.APPLICATION_JSON).build();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					return Response.status(Status.BAD_REQUEST).build();
+				}
+			} else {
 				return Response.status(Status.NO_CONTENT).header("Access-Control-Allow-Origin", "*").build();
 			}
 		} else {
@@ -145,11 +156,12 @@ public class ChatServer {
 	 * @param user_id
 	 * @return Response
 	 * @throws JSONException
+	 * @throws ParseException
 	 */
 	@GET
 	@Path("/messages/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMessage(@PathParam("user_id") String user_id, @Context HttpHeaders header) throws JSONException {
+	public Response getMessage(@PathParam("user_id") String user_id, @Context HttpHeaders header) throws JSONException, ParseException {
 
 		return getMessage(user_id, 0, header);
 	}
