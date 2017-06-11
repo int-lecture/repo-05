@@ -6,16 +6,20 @@
     <title>Chat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-	      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="chatserverMitJquery.js"></script>
+	<!--Sonst Error "GET" 141.19.142.59/favicon.ico 
+	https://stackoverflow.com/questions/31075893/im-getting-favicon-ico-error
+	-->
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	
-	
+    
     <style type="text/css">
         /*********** BODY **************/
 /* Change Body Attributes */
 html, body {
     font-family: 'Open Sans', serif;
-    background-color: blanchedalmond;
     background-image: url(plan_e.png);
     background: url(plan_e.png);
     background-repeat: repeat;
@@ -25,6 +29,7 @@ html, body {
     -o-background-size: cover;
     height: 100%;
 }
+
 .fill {
     height: 100%;
     padding-top: 5%;
@@ -99,6 +104,7 @@ html, body {
 }
 /* Header Properties */
 .header-button a {
+    color: #fff59d;
     padding: 0;
 }
 .chat-header .btn:hover {
@@ -192,6 +198,7 @@ html, body {
 }
 .send-button a {
     padding: 0;
+    color: #8d6e63;
 }
 .send-message .btn:hover {
     transition: color 0.5s ease;
@@ -252,7 +259,7 @@ body::-webkit-scrollbar {
         <div class="col-sm-3 panel-wrap">
 
             <!-- Overlay Menu / Contacts -->
-            <div class="col-sm-12 section-wrap collapse" id="Contacts">
+            <div class="col-sm-12 section-wrap">
 
                 <!--Header-->
                 <div class="row header-wrap">
@@ -267,48 +274,15 @@ body::-webkit-scrollbar {
                 </div>
 
                 <!--Contacts-->
-                <div class="row content-wrap">
+                <div class="row content-wrap" id="contacts">
                     
-                    <div class="contact btn">
-                        <div class="media-body">
-                            <div class="col-xs-3 col-sm-3 Benutzerbild" >
-                                <div class="Bild">
-                                    <img src="32.png">
-                                </div>
-                            </div>
-                            <h3 class="media-heading">Person</h3>
-                        </div>
-                    </div>
+                 <!-- Append contacts here-->
+					
                 </div>
 
             </div>
 
-            <!--Left Menu / Conversation List-->
-            <div class="col-sm-12 section-wrap">
-
-                <!--Header-->
-                <div class="row header-wrap">
-                    <div class="chat-header col-sm-12">
-                        <h4 id="username">Benutzername</h4>
-                        <div class="header-button">
-                            <a class="btn pull-right" href="#Contacts" data-toggle="collapse">
-                                <i class="fa fa-pencil-square-o fa-lg"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Conversations-->
-                <div class="row content-wrap">
-                    <div class="conversation btn">
-                        <div class="media-body">
-                            <h5 class="media-heading" id="contactName">Benutzer</h5>
-                            <small class="pull-right time">Zuletzt gesehen 12:10am</small>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
+            
         </div>
 
         <!-- Messages & Info -->
@@ -320,7 +294,7 @@ body::-webkit-scrollbar {
                 <!--Header-->
                 <div class="row header-wrap">
                     <div class="chat-header col-sm-12">
-                        <h4>Gespräch 1</h4>
+                        <h4 id="chatpartner">Gespräch 1</h4>
                         <div class="header-button">
                             <a class="btn pull-right info-btn">
                                 <i class="fa fa-info-circle fa-lg"></i>
@@ -330,8 +304,9 @@ body::-webkit-scrollbar {
                 </div>
 
                 <!--Messages-->
-                <div class="row content-wrap messages">
+                <div class="row content-wrap messages" id="chatbox">
                     <div class="msg">
+					
                         <div class="media-body">
                             <small class="pull-right time"><i class="fa fa-clock-o"></i> 12:10am</small>
 
@@ -339,17 +314,30 @@ body::-webkit-scrollbar {
                             <small class="col-sm-11">Test test test - lalalalala eine Testnachricht Test test test - lalalalala eine Testnachricht
                             Test test test - lalalalala eine Testnachricht Test test test - lalalalala eine Testnachricht</small>
                         </div>
+						
+                    </div>
+					
+					<div class="msg">
+					
+                        <div class="media-body">
+                            <small class="pull-right time"><i class="fa fa-clock-o"></i> 12:10am</small>
+
+                            <h4 class="media-heading">Person</h4>
+                            <small class="col-sm-11">Test test test - lalalalala eine Testnachricht Test test test - lalalalala eine Testnachricht
+                            Test test test - lalalalala eine Testnachricht Test test test - lalalalala eine Testnachricht</small>
+                        </div>
+						
+						
                     </div>
                 </div>
-
                 <!--Message box & Send Button-->
                 <div class="row send-wrap">
                     <div class="send-message">
                         <div class="message-text">
-                            <textarea class="no-resize-bar form-control" rows="2" placeholder="Nachricht senden..."></textarea>
+                            <textarea class="no-resize-bar form-control" rows="2" placeholder="Nachricht schreiben..." id="message"></textarea>
                         </div>
                         <div class="send-button">
-                            <a class="btn">Send <i class="fa fa-send"></i></a>
+                            <a class="btn">Senden <i class="fa fa-send"></i></a>
                         </div>
                     </div>
                 </div>

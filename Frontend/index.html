@@ -23,13 +23,14 @@
 	
 	<style>
 		body{
-			background: url(plan01.png);
-			background-image: url(plan01.png);
-			background-repeat: repeat;
+			background: url(plan_e0.png);
+			background-image: url(plan_e0.png);
+			background-repeat: no-repeat;
 			background-size: cover;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
+            background-color: #2E1701;
 		}
 
        
@@ -42,12 +43,12 @@
 <div class="container-fluid">
 <div class="row">
 	
-		<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-		<form role="form" onsubmit='return onsubmitLog();' >
+		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+		<form onsubmit='return onsubmitLog();'>
 		<h1>Anmelden</h1>
 		<div class="form-group">
-		<label for="benutzer">Email</label>
-		<input type="benutzer" class ="form-control" id="pn2" placeholder="Benutzernamen eingeben..." required>
+		<label for="user">Email</label>
+		<input type="user" class ="form-control" id="email2" placeholder="Benutzernamen eingeben..." required>
 		<label for="passwort">Passwort</label>
 		<input type="password" class ="form-control" id="pw2" placeholder="Passwort eingeben..." required>
 		</div>
@@ -72,9 +73,9 @@
 		</form>
 		</div>
 
-
-<script src = "registerMitJquery.js" ></script>
 <script src = "loginMitJquery.js" ></script>
+<script src = "registerMitJquery.js" ></script>
+
 
 
 
