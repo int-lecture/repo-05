@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -55,10 +56,10 @@ public class ChatServer {
 		try {
 			j = new JSONObject(jsonFormat);
 			date = Message.stringToDate(j.optString("date"));
-		} catch (JSONException | ParseException e1) {
+			} catch (JSONException | ParseException e1) {
 			e1.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
-		}
+			}
 
 			benutzer = db.retrieveUser(j.optString("from"));
 
@@ -77,11 +78,17 @@ public class ChatServer {
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
 			}
-			ArrayList<Message> messageList= db.retrieveMessages(j.optString("to"), 0, false);
-			int index=messageList.size()-1;
+			List<Message> messageList= db.retrieveMessages(j.optString("to"), 0, false);
+
 			message = new Message(j.optString("token"), j.optString("from"),
 					j.optString("to"), date, j.optString("text"),
-					messageList.get(index).sequence+1);
+					0);
+			int index=0;
+			if(messageList.size()>0){
+			index=messageList.size()-1;
+			message.sequence=messageList.get(index).sequence+1;
+			}
+
 			db.storeMessages(message);
 			try {
 				return Response.status(Status.CREATED).header("Access-Control-Allow-Origin", "*").entity(message.datenKorrekt().toString()).build();
@@ -89,8 +96,7 @@ public class ChatServer {
 				e.printStackTrace();
 				return Response.status(Status.BAD_REQUEST).build();
 			}
-		}
-		 else {
+		} else {
 			return Response.status(Status.BAD_REQUEST).entity("Bad format").build();
 		}
 	}
@@ -107,13 +113,12 @@ public class ChatServer {
 	 * @throws JSONException
 	 *             - Bei Problemen mit Json
 	 */
-	@SuppressWarnings("null")
 	@GET
 	@Path("/messages/{user_id}/{sequence_number}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMessage(@PathParam("user_id") String user_id, @PathParam("sequence_number") int sequence,
 			@Context HttpHeaders header) throws ParseException {
-		JSONArray jArray = null;
+		JSONArray jArray = new JSONArray();
 		MultivaluedMap<String, String> hmap = header.getRequestHeaders();
 		String token = hmap.get("Authorization").get(0).substring(6);
 		System.out.println(token);
@@ -122,7 +127,7 @@ public class ChatServer {
 		}
 		Benutzer benutzer = db.retrieveUser(user_id);
 		if (benutzer != null) {
-			ArrayList<Message> messageList = db.retrieveMessages(user_id, sequence, true);
+			List<Message> messageList = db.retrieveMessages(user_id, sequence, true);
 			if (messageList != null) {
 				benutzer.setToken(token);
 				if (!benutzer.auth()) {

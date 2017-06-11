@@ -15,7 +15,7 @@ import org.apache.commons.codec.binary.Base64;
 public class Message {
 
 	/** String der das Datum in ISO 8601 Format umwandelt. */
-	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 	/**Token des Benutzers*/
 	String token;

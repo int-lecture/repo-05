@@ -1,7 +1,6 @@
 package server;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.and;
+
 import org.bson.Document;
 
 import com.mongodb.MongoClient;
@@ -9,18 +8,19 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.lte;
 import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Filters.gte;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
-import org.bson.Document;
+
 
 /**
  * Storage provider for a MongoDB.
@@ -46,7 +46,7 @@ class StorageProviderMongoDB {
 			System.out.println("-->null");
 			return null;
 		}
-		System.out.println(doc.getString("storedPassword") + " " + doc.getString("pseudonym") + " 11111");
+		System.out.println(doc.getString("storedPassword") + " " + doc.getString("pseudonym") + "DB");
 		System.out.println(doc.getString("user"));
 		Benutzer benutzer = new Benutzer(pseudonym, doc.getString("storedPassword"), doc.getString("user"));
 		return benutzer;
@@ -62,34 +62,35 @@ class StorageProviderMongoDB {
 		collectionMessages.insertOne(doc);
 	}
 
-	public synchronized ArrayList<Message> retrieveMessages(String user_id, int sequence, boolean delete)
+	public synchronized List<Message> retrieveMessages(String user_id, int sequence, boolean delete)
 			throws ParseException {
 		MongoCollection<Document> collectionMessages = database.getCollection("messages");
 
-		ArrayList<Document> list = collectionMessages.find(and(eq("to", user_id), gt("sequence", sequence)))
+		List<Document> list = (List<Document>) collectionMessages.find(and(eq("to", user_id), gte("sequence", sequence)))
 				.into(new ArrayList<Document>());
 
 		if (list == null) {
 			return null;
 		}
 		if (delete == true) {
-			collectionMessages.deleteMany((and(eq("to", user_id), lte("sequence", sequence))));
+			collectionMessages.deleteMany((and(eq("to", user_id))));
 		}
 
-		ArrayList<Message> messageList = new ArrayList<Message>();
+		List<Message> messageList = new ArrayList<Message>();
 
 		for (Document d : list) {
 			messageList.add(new Message(d.getString("token"), d.getString("from"), d.getString("to"),
-					Message.stringToDate(d.getString("date")), d.getString("text"),
-					Integer.parseInt(d.getString("sequence"))));
+					d.getDate("date"), d.getString("text"),
+					d.getInteger("sequence")));
 		}
 		Collections.sort(messageList, new Comparator<Message>() {
 			@Override
 			public int compare(Message o1, Message o2) {
-				return o2.sequence - o1.sequence;
+				return o1.sequence - o2.sequence;
 			}
 		});
 		return messageList;
+
 
 	}
 
