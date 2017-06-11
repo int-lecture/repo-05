@@ -156,6 +156,7 @@ public class ChatServer {
 			return Response.status(Status.NO_CONTENT).header("Access-Control-Allow-Origin", "*").build();
 		}
 	}
+
 	/**
 	 * @see getMessage oben.
 	 * @param user_id
