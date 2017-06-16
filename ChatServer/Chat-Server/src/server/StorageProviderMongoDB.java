@@ -51,6 +51,20 @@ class StorageProviderMongoDB {
 		Benutzer benutzer = new Benutzer(pseudonym, doc.getString("storedPassword"), doc.getString("user"));
 		return benutzer;
 	}
+	public synchronized int getUpdatedSequence(String user_id){
+		MongoCollection<Document> collectionSequence = database.getCollection("sequence");
+		Document doc=collectionSequence.find(eq("pseudonym",user_id)).first();
+		if(doc==null){
+			doc.replace("sequence", doc.getInteger("sequence")+1);
+			collectionSequence.deleteOne(eq("pseudonym",user_id));
+			collectionSequence.insertOne(doc);
+			return doc.getInteger("sequence");
+		}else{
+			doc.append("sequence", 0).append("pseudonym", user_id);
+			return 0;
+		}
+	}
+
 
 	public synchronized void storeMessages(Message message) {
 

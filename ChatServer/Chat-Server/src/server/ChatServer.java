@@ -78,16 +78,10 @@ public class ChatServer {
 			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
 			}
-			List<Message> messageList= db.retrieveMessages(j.optString("to"), 0, false);
 
 			message = new Message(j.optString("token"), j.optString("from"),
 					j.optString("to"), date, j.optString("text"),
-					0);
-			int index=0;
-			if(messageList.size()>0){
-			index=messageList.size()-1;
-			message.sequence=messageList.get(index).sequence+1;
-			}
+					db.getUpdatedSequence(j.optString("to")));
 
 			db.storeMessages(message);
 			try {
