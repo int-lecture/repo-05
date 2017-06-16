@@ -61,6 +61,7 @@ class StorageProviderMongoDB {
 			return doc.getInteger("sequence");
 		}else{
 			Document doc1=new Document("sequence",0).append("pseudonym", user_id);
+
 			collectionSequence.insertOne(doc1);
 			return 0;
 		}
