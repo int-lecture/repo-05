@@ -54,13 +54,14 @@ class StorageProviderMongoDB {
 	public synchronized int getUpdatedSequence(String user_id){
 		MongoCollection<Document> collectionSequence = database.getCollection("sequence");
 		Document doc=collectionSequence.find(eq("pseudonym",user_id)).first();
-		if(doc==null){
+		if(doc!=null){
 			doc.replace("sequence", doc.getInteger("sequence")+1);
 			collectionSequence.deleteOne(eq("pseudonym",user_id));
 			collectionSequence.insertOne(doc);
 			return doc.getInteger("sequence");
 		}else{
-			doc.append("sequence", 0).append("pseudonym", user_id);
+			Document doc1=new Document("sequence",0).append("pseudonym", user_id);
+			collectionSequence.insertOne(doc1);
 			return 0;
 		}
 	}
